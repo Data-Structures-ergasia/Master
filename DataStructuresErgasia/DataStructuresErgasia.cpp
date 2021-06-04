@@ -51,11 +51,3 @@ int main()
 
     return 0;
 }
-
-/*while(stringstream.good() && i<10){
-         stringstream >> arr[i];
-         i++;
-       }
-       for(i = 0; i < 10; i++){
-        cout << arr[i] << endl;
-    } */
