@@ -2,6 +2,7 @@
 #include <fstream>
 #include <list>
 #include <sstream>
+#include "UnsortedArray.cpp"
 using namespace std;
 
 string removeAnnotation(string str)
@@ -13,17 +14,24 @@ string removeAnnotation(string str)
         {
             word = word + c;
         }
-        else if (c == ' ')
+        else
         {
+            c = ' ';
             word = word + c;
         }
     }
     return word;
 }
 
+void open()
+{
+   
+}
+
 int main()
 {
-    string tempWord, word, line;
+    UnsortedArray a;
+     string tempWord, word, line;
     ifstream myfile;
     myfile.open("small-file.txt");
     if (myfile.is_open())
@@ -45,12 +53,16 @@ int main()
                             c = tolower(c);
                             word = word + c;
                         }
-                        cout << word << "\n";
+                        a.add(word);
                     }
                 }
             }
         }
         myfile.close();
+        //a.print();
+        a.find("The");
+        a.find("i");
+        a.find("asdasd");
     }
     else
     {
