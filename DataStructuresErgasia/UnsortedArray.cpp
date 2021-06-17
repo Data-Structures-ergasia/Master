@@ -17,14 +17,14 @@ void UnsortedArray::find(string key)
     {
         if (array[i].key == word)
         {
-            cout << array[i].key << " was found " << array[i].found << " times." << endl;
+            cout << "\"" << array[i].key << "\" was found " << array[i].found << " times." << endl;
             return;
         }
     }
     cout << key << " was not found!";
 }
 
-short UnsortedArray::exists(string key)
+int UnsortedArray::exists(string key)
 {
     for (int i = 0; i < counter; i++)
     {
@@ -37,9 +37,21 @@ short UnsortedArray::exists(string key)
     return -1;
 }
 
+void UnsortedArray::deleteKey(string key)
+{
+    int pos = exists(key);
+    if (pos != -1)
+    {
+        entries temp = array[counter - 1];
+        array[counter - 1] = array[pos];
+        array[pos] = temp;
+        array[counter - 1].found = 0;
+        array[counter - 1].key = "";
+    }
+}
+
 void UnsortedArray::resize()
 {
-    cout << "Resizing . . . " << endl;
     int newSize = size + 250;
     size = newSize;
     entries *newArray = new (nothrow) entries[newSize];
@@ -60,7 +72,7 @@ void UnsortedArray::resize()
     }
 }
 
-void UnsortedArray::add(string key)
+void UnsortedArray::insert(string key)
 {
     int position = exists(key);
     if (position == -1)
@@ -83,7 +95,7 @@ void UnsortedArray::add(string key)
 
 UnsortedArray::UnsortedArray()
 {
-    size = 1000;
+    size = 3000;
     counter = 0;
     array = new (nothrow) entries[size];
     if (array == NULL)
@@ -101,6 +113,9 @@ void UnsortedArray::print()
     cout << "Printing . . . " << endl;
     for (int i = 0; i < counter; i++)
     {
-        cout << array[i].key << " was found " << array[i].found << " times." << endl;
+        if (array[i].found)
+        {
+            cout << array[i].key << " was found " << array[i].found << " times." << endl;
+        }
     }
 }

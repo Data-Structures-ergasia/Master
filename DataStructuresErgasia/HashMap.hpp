@@ -32,12 +32,11 @@ class HashMap
 private:
 	Pair **array;
 
-	short hash(string key);
+	int hash(string key);
 	bool find(string key);
 
 public:
 	HashMap();
-	
 	void insert(string key);
 	void print();
 	void get(string key);

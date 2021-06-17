@@ -2,9 +2,10 @@
 #include <fstream>
 #include <list>
 #include <sstream>
-#include <ctime>
+#include <chrono>
 #include "UnsortedArray.cpp"
 #include "HashMap.cpp"
+#include "BinaryTree.cpp"
 using namespace std;
 
 string removeAnnotation(string str)
@@ -25,16 +26,44 @@ string removeAnnotation(string str)
     return word;
 }
 
+void showTime(string format, chrono::steady_clock::time_point start, chrono::steady_clock::time_point end)
+{
+    if (format == "ms")
+    {
+        cout << "Elapsed time in milliseconds: "
+             << chrono::duration_cast<chrono::milliseconds>(end - start).count()
+             << " ms" << endl;
+        return;
+    }
+    if (format == "ns")
+    {
+        cout << "Elapsed time in nanoseconds: "
+             << chrono::duration_cast<chrono::nanoseconds>(end - start).count()
+             << " ns" << endl;
+        return;
+    }
+    if (format == "sec")
+    {
+        cout << "Elapsed time in seconds: "
+             << chrono::duration_cast<chrono::seconds>(end - start).count()
+             << " sec";
+        return;
+    }
+}
+
 int main()
 {
-    string *Q = new string[1000];
+    const string TIME_FORMAT = "ms", FILE_NAME = "small-file.txt";
+    chrono::steady_clock::time_point end, start;
+    string Q[1000];
     int c = 0;
     srand(time(0));
     UnsortedArray a;
     HashMap h;
+    BinaryTree b;
     string tempWord, word, line;
     ifstream myfile;
-    myfile.open("small-file.txt");
+    myfile.open(FILE_NAME);
     if (myfile.is_open())
     {
         while (getline(myfile, line))
@@ -64,8 +93,9 @@ int main()
                                 c++;
                             }
                         }
+                        a.insert(word);
+                        b.insert(word);
 
-                        a.add(word);
                         h.insert(word);
                     }
                 }
@@ -74,20 +104,38 @@ int main()
         myfile.close();
 
         cout << endl
-             << " UnsortedArray " << endl
+             << "          UnsortedArray " << endl
              << "~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
-        for (int i = 0; i < c; i++)
+        start = chrono::steady_clock::now();
+        for (string q : Q)
         {
-            a.find(Q[i]);
+            a.find(q);
         }
+        showTime(TIME_FORMAT, start, end);
+
         cout << endl
-             << " HashMap " << endl
+             << "          HashMap " << endl
              << "~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-        for (int i = 0; i < c; i++)
+        start = chrono::steady_clock::now();
+        for (string q : Q)
         {
-            h.get(Q[i]);
+            h.get(q);
         }
+        end = chrono::steady_clock::now();
+        showTime(TIME_FORMAT, start, end);
+
+        cout << endl
+             << "          BinarySearchTree " << endl
+             << "~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+
+        start = chrono::steady_clock::now();
+        for (string q : Q)
+        {
+            b.find(q);
+        }
+        end = chrono::steady_clock::now();
+        showTime(TIME_FORMAT, start, end);
     }
     else
     {

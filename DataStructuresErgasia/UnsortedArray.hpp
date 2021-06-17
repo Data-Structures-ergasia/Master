@@ -12,21 +12,23 @@ private:
 	struct entries
 	{
 		string key;
-		int found;
+		unsigned int found;
 	};
 
 	entries *array;
-	int size, counter;
+	int size;
+	int counter;
 
 	void resize();
 
-	short exists(string key);
+	int exists(string key);
 
 public:
 	UnsortedArray();
-	void add(string key);
+	void insert(string key);
 	void print();
 	void find(string key);
+	void deleteKey(string key);
 	~UnsortedArray();
 };
 #endif

@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <iostream>
 
-short HashMap::hash(string key)
+using namespace std;
+
+int HashMap::hash(string key)
 {
     char first = key[0];
-    return (short)first - 97;
+    return (int)first - 97;
 }
 
 HashMap::HashMap()
@@ -19,7 +21,7 @@ HashMap::HashMap()
 
 bool HashMap::find(string key)
 {
-    short pos = hash(key);
+    int pos = hash(key);
     Pair *pair=array[pos];
     while(pair!=NULL){
         if (pair->key==key){
@@ -32,7 +34,7 @@ bool HashMap::find(string key)
 }
 
 void HashMap::get(string key){
-    short pos = hash(key);
+    int pos = hash(key);
     Pair *pair=array[pos];
     while(pair!=NULL){
         if (pair->key==key){
@@ -67,6 +69,7 @@ void HashMap::insert(string key)
     }
 
 }
+
 
 void HashMap::print()
 {
