@@ -46,7 +46,6 @@ public:
 	void preorder();
 	void postorder();
 	void deleteKey(string key);
-	void print();
 	~BinaryTree();
 };
 #endif

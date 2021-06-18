@@ -9,10 +9,11 @@ BinaryTree::BinaryTree()
 
 void BinaryTree::find(string key)
 {
-     short compare;
+    short compare;
     Node *temp = root;
-    while (temp!=NULL){
-         compare = temp->key.compare(key);
+    while (temp != NULL)
+    {
+        compare = temp->key.compare(key);
 
         switch (compare)
         {
@@ -38,6 +39,7 @@ void BinaryTree::insert(string key)
 
     if (root == NULL)
     {
+        cout << "Adding " << key << " on root " <<endl;
         root = newNode;
         return;
     }
@@ -47,7 +49,6 @@ void BinaryTree::insert(string key)
 
     while (temp != NULL)
     {
-       // cout << temp->key << endl;
         compare = temp->key.compare(key);
 
         switch (compare)
@@ -63,6 +64,7 @@ void BinaryTree::insert(string key)
             temp = temp->right;
             break;
         default:
+            //already exists
             temp->found++;
             return;
         }
@@ -73,9 +75,12 @@ void BinaryTree::insert(string key)
     switch (compare)
     {
     case 1:
+        cout<<"Adding " << key << " left of " << tempRoot->key<< endl;
         tempRoot->left = newNode;
         break;
     case -1:
+        cout<<"Adding " << key << " right of " << tempRoot->key << endl;
+
         tempRoot->right = newNode;
         break;
     default:
@@ -85,6 +90,8 @@ void BinaryTree::insert(string key)
 
 void BinaryTree::inorder()
 {
+    cout<<"Showing inorder traverse of bts :" <<endl;
+
     inorder(root);
 }
 
@@ -97,25 +104,45 @@ void BinaryTree::inorder(Node *node)
     }
 
     inorder(node->left);
-    cout << node->key << "  was found "<< node->found << " times" << endl;
+    cout << node->key << "  was found " << node->found << " times" << endl;
 
     inorder(node->right);
 }
 
-void BinaryTree::print()
+void BinaryTree::preorder()
 {
+    cout<<"Showing preorder traverse of bts :" <<endl;
+
+    preorder(root);
+}
+
+void BinaryTree::preorder(Node *node)
+{
+    if (node==NULL){
+        return;
+    }
+    cout << node->key << "  was found " << node->found << " times" << endl;
+    preorder(node->left);
+    preorder(node->right);
+}
+
+void BinaryTree::postorder()
+{
+    cout<<"Showing postorder traverse of bts :" <<endl;
+    postorder(root);
+}
+
+void BinaryTree::postorder(Node *node)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+    postorder(node->left);
+    postorder(node->right);
+    cout << node->key << "  was found " << node->found << " times" << endl;
 }
 
 BinaryTree::~BinaryTree()
 {
 }
-
-/*
- 
-    if (node == NULL)
-    {
-        return;
-    }
-    inorder(node->left);
-    cout << node->key << endl;
-    inorder(node->right); */

@@ -93,17 +93,26 @@ int main()
                                 c++;
                             }
                         }
-                        a.insert(word);
-                        b.insert(word);
-
-                        h.insert(word);
+                     //   a.insert(word);
+                      //  b.insert(word);
+                     //   h.insert(word);
                     }
                 }
             }
         }
         myfile.close();
 
-        cout << endl
+        b.insert("hi");
+        b.insert("bs");
+        b.insert("se");
+        b.insert("ab");
+        b.insert("hf");
+
+        b.inorder();
+        b.postorder();
+        b.preorder();
+
+   /*     cout << endl
              << "          UnsortedArray " << endl
              << "~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
@@ -135,7 +144,7 @@ int main()
             b.find(q);
         }
         end = chrono::steady_clock::now();
-        showTime(TIME_FORMAT, start, end);
+        showTime(TIME_FORMAT, start, end); */
     }
     else
     {
