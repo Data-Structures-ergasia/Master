@@ -21,7 +21,7 @@ void UnsortedArray::find(string key)
             return;
         }
     }
-    cout << key << " was not found!";
+    cout << "'" << key << "' was not found!";
 }
 
 int UnsortedArray::exists(string key)

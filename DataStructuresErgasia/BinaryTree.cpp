@@ -39,7 +39,6 @@ void BinaryTree::insert(string key)
 
     if (root == NULL)
     {
-        cout << "Adding " << key << " on root " <<endl;
         root = newNode;
         return;
     }
@@ -75,12 +74,11 @@ void BinaryTree::insert(string key)
     switch (compare)
     {
     case 1:
-        cout<<"Adding " << key << " left of " << tempRoot->key<< endl;
+       
         tempRoot->left = newNode;
         break;
     case -1:
-        cout<<"Adding " << key << " right of " << tempRoot->key << endl;
-
+        
         tempRoot->right = newNode;
         break;
     default:
