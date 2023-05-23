@@ -4,24 +4,21 @@
 
 using namespace std;
 
-void UnsortedArray::find(string key)
+string UnsortedArray::find(string key)
 {
-    string word = "";
-    for (char c : key)
-    {
-        c = tolower(c);
-        word = word + c;
-    }
+    string returnString = "Key :\"" + key + "\"";
+
 
     for (int i = 0; i < counter; i++)
     {
-        if (array[i].key == word)
+        if (array[i].key == key)
         {
-            cout << "\"" << array[i].key << "\" was found " << array[i].found << " times." << endl;
-            return;
+            returnString += " was found " + to_string(array[i].found) + " times!\n";
+            return returnString;
         }
     }
-    cout << "'" << key << "' was not found!";
+    returnString +=  " was not found!";
+    return returnString;
 }
 
 int UnsortedArray::exists(string key)

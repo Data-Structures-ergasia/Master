@@ -39,7 +39,7 @@ public:
 	HashMap();
 	void insert(string key);
 	void print();
-	void get(string key);
+	string get(string key);
 	~HashMap();
 };
 #endif

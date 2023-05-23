@@ -33,17 +33,18 @@ bool HashMap::find(string key)
     return false;
 }
 
-void HashMap::get(string key){
+string HashMap::get(string key){
     int pos = hash(key);
     Pair *pair=array[pos];
+    string returnString = "";
     while(pair!=NULL){
         if (pair->key==key){
-            cout<< "Key : \"" << key << "\" was found " << pair->found << " times!" <<endl;
-            return;
+            returnString = "Key :\"" + key + "\" was found " + to_string(pair->found) + " times!\n";
+            return returnString;
         }
         pair=pair->next;
     }
-    cout << "Key : " << key << " was not found!"<<endl;
+    return "Key : " + key + " was not found!\n";
 }
 
 void HashMap::insert(string key)

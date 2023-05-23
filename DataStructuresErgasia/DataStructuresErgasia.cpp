@@ -3,6 +3,8 @@
 #include <list>
 #include <sstream>
 #include <chrono>
+#include <cctype>
+#include <string.h>
 #include "UnsortedArray.cpp"
 #include "HashMap.cpp"
 #include "BinaryTree.cpp"
@@ -10,145 +12,134 @@ using namespace std;
 
 string removeAnnotation(string str)
 {
-    string word = "";
+    string line = "";
     for (char c : str)
     {
         if (isalpha(c))
         {
-            word = word + c;
+            line += tolower(c);
         }
-        else
-        {
-            c = ' ';
-            word = word + c;
+        else if (isspace(c)){
+            line += c;
         }
+        
     }
-    return word;
+    return line;
 }
 
-void showTime(string format, chrono::steady_clock::time_point start, chrono::steady_clock::time_point end)
+string showTime(string format, chrono::steady_clock::time_point start, chrono::steady_clock::time_point end)
 {
+    string returnString = "Ellasped time in ";
     if (format == "ms")
     {
-        cout << "Elapsed time in milliseconds: "
-             << chrono::duration_cast<chrono::milliseconds>(end - start).count()
-             << " ms" << endl;
-        return;
+        int time = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+        returnString = returnString + to_string(time) + "milisseconds: " + "ms\n";
+
+        return returnString;
     }
     if (format == "ns")
     {
-        cout << "Elapsed time in nanoseconds: "
-             << chrono::duration_cast<chrono::nanoseconds>(end - start).count()
-             << " ns" << endl;
-        return;
+        int time = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+        returnString = returnString + to_string(time) + "nanosecods: "  + "ns\n";
+
+        return returnString;
     }
     if (format == "sec")
     {
-        cout << "Elapsed time in seconds: "
-             << chrono::duration_cast<chrono::seconds>(end - start).count()
-             << " sec";
-        return;
+        int time = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+        returnString = returnString + to_string(time) + "seconds: "+ "sec\n";
+
+        return returnString;
     }
+
+    return "";
 }
 
 int main()
 {
-    const string TIME_FORMAT = "ms", FILE_NAME = "small-file.txt";
+    const string TIME_FORMAT = "ms", INPUT_FILE_NAME = "small-file.txt", OUTPUT_FILE_NAME = "output.txt";
+    ifstream inputFile;
+    ofstream outputFile;
+
+    inputFile.open(INPUT_FILE_NAME);
+    outputFile.open(OUTPUT_FILE_NAME);
+
+    if (!outputFile.is_open()){
+        cout << "Could not open \"output.txt\"";
+        return 1;
+    }
+
+    if (!inputFile.is_open()){
+        outputFile << "Could not open \"small-file.txt\"";
+        return 1;
+    }
+
     chrono::steady_clock::time_point end, start;
+
     string Q[1000];
-    string pair = "";
-    int pairCounter = 0, QsetCounter = 0;
+    string previousWord, currentWord, line, pair;
+
+    int  QsetCounter = 0;
     srand(time(0));
     UnsortedArray unsortedArray;
     HashMap hashMap;
     BinaryTree binaryTree;
-    string tempWord, word, line;
-    ifstream myfile;
-    myfile.open(FILE_NAME);
-
-    if (myfile.is_open())
+    
+    while (getline(inputFile,line))
     {
-        while (getline(myfile, line))
-        {
-            //  cout<<line.length()<< "\n";
-            if (!line.empty())
-            {
-                line = removeAnnotation(line);
-                stringstream stringstream(line);
-                // cout << "~~~~~~~~~~~~~~~~~" << line << endl;
-                while (getline(stringstream, tempWord, ' '))
-                {
+        if (!line.empty()){
+            istringstream stringStream(removeAnnotation(line));
+            stringStream >> previousWord;
 
-                    if (!tempWord.empty())
-                    {
+            while ( stringStream >> currentWord){
+                pair = previousWord + " " + currentWord;
 
-                        string word = "";
-                        for (char c : tempWord)
-                        {
-                            c = tolower(c);
-                            word = word + c;
-                        }
-                        
-                       
-                        if (pairCounter == 0)
-                        {
-                            pair = word;
-                        }
-                        else if (pairCounter == 1)
-                        {
-                            pair = pair + " " + word;
-                        }
-                        pairCounter++;
-                        if (pairCounter == 2)
-                        {
-                            // cout << "Pair = " << pair << "  counter = " << pairCounter << endl;
-                            if (QsetCounter < 1000)
-                            {
-                                int randomNumber = rand();
-                                if (randomNumber % 10 > 7)
-                                {
-                                    Q[QsetCounter] = pair;
-                                    QsetCounter++;
-                                }
-                            }
-                            // unsortedArray.insert(pair);
-                            //  binaryTree.insert(pair);
-                            hashMap.insert(pair);
-                            pairCounter = 0;
-                            pair = "";
-                        }
+                unsortedArray.insert(pair);
+                //  binaryTree.insert(pair);
+
+                hashMap.insert(pair);
+
+                previousWord = currentWord;
+
+                if (QsetCounter <1000){
+                    int randomNumber = rand();
+                    if (randomNumber % 10 >7){
+                        Q[QsetCounter] = pair;
+                        QsetCounter++;
                     }
-                }
+                }       
             }
         }
-        myfile.close();
+    }   
+    
+    inputFile.close();   
+    
+    // UnsortedArray
+    
+        outputFile << endl
+            << "          UnsortedArray " << endl
+            << "~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
-        // UnsortedArray
-        /*
-               cout << endl
-                   << "          UnsortedArray " << endl
-                   << "~~~~~~~~~~~~~~~~~~~~~~" << endl;
-
-              start = chrono::steady_clock::now();
-              for (string q : Q)
-              {
-                  unsortedArray.find(q);
-              }
-              end = chrono::steady_clock::now();
-              showTime(TIME_FORMAT, start, end); */
-
-        // Hashmap
-        cout << endl
-             << "          HashMap " << endl
-             << "~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
         start = chrono::steady_clock::now();
         for (string q : Q)
         {
-            hashMap.get(q);
+            outputFile << unsortedArray.find(q);
         }
         end = chrono::steady_clock::now();
-        showTime(TIME_FORMAT, start, end);
+        outputFile << showTime(TIME_FORMAT, start, end); 
 
+        //Hashmap
+        outputFile << endl
+                << "          HashMap " << endl
+                << "~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        start = chrono::steady_clock::now();
+        for (string q : Q)
+        {
+            outputFile << hashMap.get(q);
+        }
+        end = chrono::steady_clock::now();
+        outputFile << showTime(TIME_FORMAT, start, end);
+    
         // BST
         /*   cout << endl
                 << "          BinarySearchTree " << endl
@@ -161,11 +152,7 @@ int main()
            }
            end = chrono::steady_clock::now();
            showTime(TIME_FORMAT, start, end); */
-    }
-    else
-    {
-        cout << "Could not open file!";
-    }
+        outputFile.close();
 
     return 0;
 }

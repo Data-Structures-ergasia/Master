@@ -27,7 +27,7 @@ public:
 	UnsortedArray();
 	void insert(string key);
 	void print();
-	void find(string key);
+	string find(string key);
 	void deleteKey(string key);
 	~UnsortedArray();
 };
