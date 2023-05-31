@@ -126,25 +126,25 @@ void Avl::insert(string key)
         if(flagtemp->key.compare(key)==1){
             //checking if we continue going left
             if(flagtemp->left->key.compare(key)==1){
-                RotateOneWay(*flagtemp,false);
+                Rotate(*flagtemp,false);
                 return;
             }
             //we turned from left to right so we have an LR problem
             //first we make a left turn of the tree below our flagtemp
-            RotateOneWay(*flagtemp->left,true);
+            Rotate(*flagtemp->left,true);
             //secong we make a right turn of the tree of flagtemp
-            RotateOneWay(*flagtemp,false);
+            Rotate(*flagtemp,false);
         }else if(flagtemp->key.compare(key)==-1){
             //checking if we continue going right
             if(flagtemp->right->key.compare(key)==-1){
-                RotateOneWay(*flagtemp,true);
+                Rotate(*flagtemp,true);
                 return;
             }
             //we turned from left to right so we have an RL problem
             //first we make a right turn of the tree below our flagtemp
-            RotateOneWay(*flagtemp->right,false);
+            Rotate(*flagtemp->right,false);
             //secong we make a left turn of the tree of flagtemp
-            RotateOneWay(*flagtemp,true);
+            Rotate(*flagtemp,true);
         }
     }
 }

@@ -14,7 +14,7 @@ int NodeTreeHeight(AvlNode* node)
 //if turn= false we turn right
 //for left turn we give the parent,height of the root to the right node and we give the left childs and height of the right child to the root 
 //for right turn we give the parent,height of the root to the left node and we give the right childs and height of the left child to the root 
-void RotateOneWay(AvlNode &root,bool turn){
+void Rotate(AvlNode &root,bool turn){
     AvlNode *tempParent=root.parent;
     //left turn of the tree
     if(turn){
