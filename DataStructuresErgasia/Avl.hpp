@@ -32,10 +32,6 @@ public:
 		left = NULL;
 		right=NULL;
 	}
-	~AvlNode(){
-		delete left;
-		delete right;
-	}
 };
 
 class Avl

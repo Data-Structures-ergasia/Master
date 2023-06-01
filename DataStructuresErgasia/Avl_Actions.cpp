@@ -36,3 +36,19 @@ void Rotate(AvlNode &root,bool turn){
         root.left->right->parent=tempRoot;
     }
 }
+void deleteTree(AvlNode* &root){
+    // Base case: empty tree
+    if (root == nullptr) {
+        return;
+    }
+ 
+    // delete left and right subtree first (Postorder)
+    deleteTree(root->left);
+    deleteTree(root->right);
+ 
+    // delete the current node after deleting its left and right subtree
+    delete root;
+ 
+    // set root as null before returning
+    root = nullptr;
+}

@@ -150,6 +150,6 @@ void Avl::insert(string key)
 }
 Avl::~Avl()
 {
-    delete root;
-
+    AvlNode* del=root;
+    deleteTree(del);
 }
