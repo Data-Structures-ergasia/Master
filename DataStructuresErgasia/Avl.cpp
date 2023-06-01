@@ -150,4 +150,6 @@ void Avl::insert(string key)
 }
 Avl::~Avl()
 {
+    delete root;
+
 }
