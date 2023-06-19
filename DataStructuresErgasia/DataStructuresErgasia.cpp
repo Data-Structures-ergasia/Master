@@ -3,13 +3,23 @@
 #include <list>
 #include <sstream>
 #include <chrono>
-#include <cctype>
 #include <string.h>
+#include "UnsortedArray.h"
 #include "UnsortedArray.cpp"
-#include "HashMap.cpp"
+#include "HashTable.h"
+#include "HashTable.cpp"
+#include "Avl.cpp"
 #include "BinaryTree.cpp"
-using namespace std;
+#include "Constants.h"
 
+using namespace std;
+using namespace constants;
+
+
+/*
+    this function removes annotation from a given string by parsing each character and checking if it is alphanumeric or space.
+    the alphanumeric characters are set to lowercase
+*/
 string removeAnnotation(string str)
 {
     string line = "";
@@ -22,42 +32,104 @@ string removeAnnotation(string str)
         else if (isspace(c)){
             line += c;
         }
-        
+
     }
     return line;
 }
 
-string showTime(string format, chrono::steady_clock::time_point start, chrono::steady_clock::time_point end)
+
+/*
+    this function calculates and prints the time in different formats, needed for each structure to find the given keys
+*/
+string showTime(chrono::steady_clock::time_point start, chrono::steady_clock::time_point end)
 {
-    string returnString = "Ellasped time in ";
-    if (format == "ms")
+    string returnString = ELLAPSED_TIME_IN;
+    if (TIME_FORMAT == MS)
     {
         int time = chrono::duration_cast<chrono::milliseconds>(end - start).count();
-        returnString = returnString + to_string(time) + "milisseconds: " + "ms\n";
+        returnString = returnString  + MILLISECONDS + to_string(time) + MS + NEWLINE;
 
         return returnString;
     }
-    if (format == "ns")
+    if (TIME_FORMAT == NS)
     {
-        int time = chrono::duration_cast<chrono::milliseconds>(end - start).count();
-        returnString = returnString + to_string(time) + "nanosecods: "  + "ns\n";
+        int time = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
+        returnString = returnString  + NANOSECONDS + to_string(time) + NS + NEWLINE;
 
         return returnString;
     }
-    if (format == "sec")
+    if (TIME_FORMAT == SEC)
     {
-        int time = chrono::duration_cast<chrono::milliseconds>(end - start).count();
-        returnString = returnString + to_string(time) + "seconds: "+ "sec\n";
+        int time = chrono::duration_cast<chrono::seconds>(end - start).count();
+        returnString = returnString  + SECONDS + to_string(time) + SEC + NEWLINE;
 
         return returnString;
     }
+    return EMPTY;
+}
 
-    return "";
+/*
+    Add the name of each datstructure before its results
+*/
+string printHeadLine(string title){
+    string headLine = HEADLINE_FIRST_PART + title + HEADLINE_SECOND_PART;
+    return headLine;
+}
+
+/*
+    Search the unsorted array for the pairs in question, results to output file
+*/
+    void searchUnsortedArray(UnsortedArray unsortedArray, ofstream &outputFile, string (&Q)[Q_SIZE]){
+        chrono::steady_clock::time_point end, start;
+        outputFile << printHeadLine(UNSORTED_ARRAY);
+        outputFile << unsortedArray.getTimeAs(TIME_FORMAT);
+        start = chrono::steady_clock::now();
+
+        for (string q : Q)
+        {
+            outputFile << unsortedArray.find(q);
+        }
+        end = chrono::steady_clock::now();
+        outputFile << showTime(start, end);
+    }
+
+// /*
+//     Search the binary tree for the pairs in question, results to output file
+// */
+// void searchBinaryTree(BinaryTree binaryTree, ofstream &outputFile, string (&Q)[Q_SIZE]){
+//     chrono::steady_clock::time_point end, start;
+//     outputFile << printHeadLine(BINARY_TREE);
+
+//     start = chrono::steady_clock::now();
+
+//     for (string q : Q)
+//     {
+//         outputFile << binaryTree.find(q);
+//     }
+//     end = chrono::steady_clock::now();
+//     outputFile << showTime(start, end);
+// }
+
+/*
+    Search the binary tree for the pairs in question, results to output file
+*/
+void searchHashTable(HashTable hashTable, ofstream &outputFile, string (&Q)[Q_SIZE]){
+    chrono::steady_clock::time_point end, start;
+    outputFile << printHeadLine(HASH_TABLE);
+    outputFile << hashTable.getTimeAs(TIME_FORMAT);
+
+    start = chrono::steady_clock::now();
+    for (string q : Q)
+    {
+        outputFile << hashTable.get(q);
+    }
+    end = chrono::steady_clock::now();
+
+    outputFile << showTime(start, end);
 }
 
 int main()
 {
-    const string TIME_FORMAT = "ms", INPUT_FILE_NAME = "small-file.txt", OUTPUT_FILE_NAME = "output.txt";
     ifstream inputFile;
     ofstream outputFile;
 
@@ -65,94 +137,66 @@ int main()
     outputFile.open(OUTPUT_FILE_NAME);
 
     if (!outputFile.is_open()){
-        cout << "Could not open \"output.txt\"";
+        cout << COULD_NOT_OPEN + OUTPUT_FILE_NAME;
         return 1;
     }
 
     if (!inputFile.is_open()){
-        outputFile << "Could not open \"small-file.txt\"";
+        outputFile << COULD_NOT_OPEN + INPUT_FILE_NAME;
         return 1;
     }
+    
+    // if one of the files can not be opened then the programm stops.
 
-    chrono::steady_clock::time_point end, start;
-
-    string Q[1000];
+    string Q[Q_SIZE];
     string previousWord, currentWord, line, pair;
 
     int  QsetCounter = 0;
     srand(time(0));
     UnsortedArray unsortedArray;
-    HashMap hashMap;
+    HashTable hashTable;
     BinaryTree binaryTree;
-    
+
+//  get each line of the file
     while (getline(inputFile,line))
     {
         if (!line.empty()){
+            // if it is a non empty line, then we remove the annotations and get the first word
             istringstream stringStream(removeAnnotation(line));
             stringStream >> previousWord;
 
+            // iterate each word of the line separated by space
             while ( stringStream >> currentWord){
                 pair = previousWord + " " + currentWord;
 
                 unsortedArray.insert(pair);
-                //  binaryTree.insert(pair);
-
-                hashMap.insert(pair);
+                //binaryTree.insert(pair);
+                hashTable.insert(pair);
 
                 previousWord = currentWord;
 
-                if (QsetCounter <1000){
+                // insert a word to Qset with an arbitary chance of 30%
+               if (QsetCounter <Q_SIZE){
                     int randomNumber = rand();
-                    if (randomNumber % 10 >7){
+                    if (randomNumber % 10 > 7){
                         Q[QsetCounter] = pair;
                         QsetCounter++;
                     }
-                }       
+                }
             }
         }
-    }   
-    
-    inputFile.close();   
-    
-    // UnsortedArray
-    
-        outputFile << endl
-            << "          UnsortedArray " << endl
-            << "~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    }
 
-        start = chrono::steady_clock::now();
-        for (string q : Q)
-        {
-            outputFile << unsortedArray.find(q);
-        }
-        end = chrono::steady_clock::now();
-        outputFile << showTime(TIME_FORMAT, start, end); 
 
-        //Hashmap
-        outputFile << endl
-                << "          HashMap " << endl
-                << "~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-        start = chrono::steady_clock::now();
-        for (string q : Q)
-        {
-            outputFile << hashMap.get(q);
-        }
-        end = chrono::steady_clock::now();
-        outputFile << showTime(TIME_FORMAT, start, end);
-    
-        // BST
-        /*   cout << endl
-                << "          BinarySearchTree " << endl
-                << "~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    inputFile.close();
 
-           start = chrono::steady_clock::now();
-           for (string q : Q)
-           {
-               binaryTree.find(q);
-           }
-           end = chrono::steady_clock::now();
-           showTime(TIME_FORMAT, start, end); */
-        outputFile.close();
+    chrono::steady_clock::time_point end, start;
+
+    searchUnsortedArray(unsortedArray, outputFile, Q);
+    //searchBinaryTree(binaryTree, outputFile, Q);
+    searchHashTable(hashTable, outputFile, Q);
+
+    outputFile.close();
 
     return 0;
 }
