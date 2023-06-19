@@ -1,118 +1,168 @@
-#include "UnsortedArray.hpp"
+#include "UnsortedArray.h"
 #include <stdlib.h>
+#include <chrono>
 #include <iostream>
+#include "Constants.h"
 
+using namespace constants;
 using namespace std;
+
+UnsortedArray::UnsortedArray()
+{
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
+    chrono::milliseconds totalElapsedTime(0); 
+
+    capacity = ARRAY_SIZE;
+    size = 0;
+    array = new (nothrow) entry*[capacity];
+
+    for (size_t i = 0 ; i < capacity ; i++){
+        array[i] = new entry();
+    }
+
+    if (array == NULL)
+    {
+        cout << NOT_ENOUGH_MEMORY;
+    }
+
+    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
+    chrono::milliseconds elapsedTime = chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+        
+    totalElapsedTime += elapsedTime;
+}
+
+UnsortedArray::~UnsortedArray()
+{
+    for (size_t i = 0 ; i < capacity ; i++){
+        delete array[i];
+    }
+
+    delete[] array;
+}
+
+string UnsortedArray::getTimeAs(string format){
+    string returnString = BUILDING_TIME;
+    if (TIME_FORMAT == MS)
+    {
+        int time = std::chrono::duration_cast<chrono::milliseconds>(totalElapsedTime).count();
+        returnString = returnString  + MILLISECONDS + to_string(time) + MS + NEWLINE;
+
+        return returnString;
+    }
+    if (TIME_FORMAT == NS)
+    {
+        int time = std::chrono::duration_cast<chrono::nanoseconds>(totalElapsedTime).count();
+        returnString = returnString  + NANOSECONDS + to_string(time) + NS + NEWLINE;
+
+        return returnString;
+    }
+    if (TIME_FORMAT == SEC)
+    {
+        int time = std::chrono::duration_cast<chrono::seconds>(totalElapsedTime).count();
+        returnString = returnString  + SECONDS + to_string(time) + SEC + NEWLINE;
+
+        return returnString;
+    }
+    return EMPTY;
+}
 
 string UnsortedArray::find(string key)
 {
-    string returnString = "Key :\"" + key + "\"";
+    string returnString = KEY + key + RIGHT_QUOTATION_MARK;
 
-
-    for (int i = 0; i < counter; i++)
+    for (size_t i = 0; i < size; i++)
     {
-        if (array[i].key == key)
+        short compare = array[i] -> key.compare(key);
+        if (compare == 0)
         {
-            returnString += " was found " + to_string(array[i].found) + " times!\n";
+            returnString += WAS_FOUND + to_string(array[i] -> found) + TIMES + NEWLINE;
             return returnString;
         }
     }
-    returnString +=  " was not found!";
+    returnString += WAS_NOT_FOUND + NEWLINE;
     return returnString;
-}
-
-int UnsortedArray::exists(string key)
-{
-    for (int i = 0; i < counter; i++)
-    {
-        if (array[i].key == key)
-        {
-            //cout << key << " exists" << endl;
-            return i;
-        }
-    }
-    return -1;
-}
-
-void UnsortedArray::deleteKey(string key)
-{
-    int pos = exists(key);
-    if (pos != -1)
-    {
-        entries temp = array[counter - 1];
-        array[counter - 1] = array[pos];
-        array[pos] = temp;
-        array[counter - 1].found = 0;
-        array[counter - 1].key = "";
-    }
 }
 
 void UnsortedArray::resize()
 {
-    int newSize = size + 250;
-    size = newSize;
-    entries *newArray = new (nothrow) entries[newSize];
-    if (newArray != NULL)
+    size_t newCapacity = capacity + capacity/2 ;
+    size_t oldCapacity = capacity;
+
+    capacity = newCapacity;
+    size = 0;
+
+    entry **temp = new (nothrow) entry*[newCapacity];
+
+    for (size_t i = 0 ; i < capacity ; i++){
+        temp[i] = new entry();
+    }
+
+    if (temp != NULL)
     {
-        entries *temp = array;
-        array = newArray;
-        for (int i = 0; i < counter; i++)
-        {
-            array[i] = temp[i];
+        for (size_t i = 0; i < oldCapacity ; i++){
+            insertIntoTable(temp, array[i] -> key, array[i] -> found);
         }
-        delete[] temp;
+
+        for (size_t i = 0 ; i < oldCapacity ; i++){
+            delete array[i];
+        }
+
+        delete [] array;
+
+        array = temp;
     }
     else
     {
-        cout << "There was not enough memory to resize!" << endl;
+        cout << NOT_ENOUGH_MEMORY_TO_RESIZE << NEWLINE;
         exit(1);
     }
 }
 
+void UnsortedArray::insertIntoTable(entry** tableToInsertTo, string key, unsigned int found){
+    for (size_t i = 0; i < size; i++)
+    {
+        short compare = tableToInsertTo[i] -> key.compare(key);
+        if (compare == 0)
+        {
+            tableToInsertTo[i] -> found ++;
+            return;
+        }
+    }
+
+    tableToInsertTo[size] -> key = key;
+    tableToInsertTo[size] -> found = found;
+    size++;
+}
+
+void UnsortedArray::insertIntoTable(entry** tableToInsertTo, string key){
+    for (size_t i = 0; i < size; i++)
+    {
+        short compare = array[i] -> key.compare(key);
+        if (compare == 0)
+        {
+            tableToInsertTo[i] -> found ++;
+            return;            
+        }
+    }
+
+    tableToInsertTo[size] -> key = key;
+    tableToInsertTo[size] -> found = 1;
+    size++;
+}
+
 void UnsortedArray::insert(string key)
 {
-    int position = exists(key);
-    if (position == -1)
-    {
-        if (counter >= size)
-        {
-            resize();
-        }
+    std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); 
 
-        //cout << "Adding : " << key << endl;
-        array[counter].key = key;
-        array[counter].found = 1;
-        counter++;
-    }
-    else
-    {
-        array[position].found++;
-    }
-}
 
-UnsortedArray::UnsortedArray()
-{
-    size = 3000;
-    counter = 0;
-    array = new (nothrow) entries[size];
-    if (array == NULL)
-    {
-        cout << "Not enough Memory";
+    if (size >= capacity){
+        resize();
     }
-}
-UnsortedArray::~UnsortedArray()
-{
-    delete[] array;
-}
+    
+    insertIntoTable(array,key);
 
-void UnsortedArray::print()
-{
-    cout << "Printing . . . " << endl;
-    for (int i = 0; i < counter; i++)
-    {
-        if (array[i].found)
-        {
-            cout << array[i].key << " was found " << array[i].found << " times." << endl;
-        }
-    }
+    std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+    std::chrono::milliseconds elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+        
+    totalElapsedTime += elapsedTime;
 }
