@@ -174,23 +174,26 @@ string HashTable::get(string key){
     return returnString;
 }
 
-string HashTable::getTimeAs(string format){
+string HashTable::getBuildingTime(){
     string returnString = BUILDING_TIME;
-    if (TIME_FORMAT == MS)
+
+    if (HASH_TABLE_BUILD_TIME_UNIT == MS)
     {
         int time = chrono::duration_cast<chrono::milliseconds>(totalElapsedTime).count();
         returnString = returnString  + MILLISECONDS + to_string(time) + MS + NEWLINE;
 
         return returnString;
     }
-    if (TIME_FORMAT == NS)
+    
+    if (HASH_TABLE_BUILD_TIME_UNIT == NS)
     {
         int time = chrono::duration_cast<chrono::nanoseconds>(totalElapsedTime).count();
         returnString = returnString  + NANOSECONDS + to_string(time) + NS + NEWLINE;
 
         return returnString;
     }
-    if (TIME_FORMAT == SEC)
+
+    if (HASH_TABLE_BUILD_TIME_UNIT == SEC)
     {
         int time = chrono::duration_cast<chrono::seconds>(totalElapsedTime).count();
         returnString = returnString  + SECONDS + to_string(time) + SEC + NEWLINE;

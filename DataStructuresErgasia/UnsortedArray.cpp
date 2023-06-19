@@ -40,23 +40,24 @@ UnsortedArray::~UnsortedArray()
     delete[] array;
 }
 
-string UnsortedArray::getTimeAs(string format){
+string UnsortedArray::getBuildingTime(){
     string returnString = BUILDING_TIME;
-    if (TIME_FORMAT == MS)
+
+    if (UNORDERED_ARRAY_BUILD_TIME_UNIT == MS)
     {
         int time = std::chrono::duration_cast<chrono::milliseconds>(totalElapsedTime).count();
         returnString = returnString  + MILLISECONDS + to_string(time) + MS + NEWLINE;
 
         return returnString;
     }
-    if (TIME_FORMAT == NS)
+    if (UNORDERED_ARRAY_BUILD_TIME_UNIT == NS)
     {
         int time = std::chrono::duration_cast<chrono::nanoseconds>(totalElapsedTime).count();
         returnString = returnString  + NANOSECONDS + to_string(time) + NS + NEWLINE;
 
         return returnString;
     }
-    if (TIME_FORMAT == SEC)
+    if (UNORDERED_ARRAY_BUILD_TIME_UNIT == SEC)
     {
         int time = std::chrono::duration_cast<chrono::seconds>(totalElapsedTime).count();
         returnString = returnString  + SECONDS + to_string(time) + SEC + NEWLINE;
@@ -153,7 +154,6 @@ void UnsortedArray::insertIntoTable(entry** tableToInsertTo, string key){
 void UnsortedArray::insert(string key)
 {
     std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); 
-
 
     if (size >= capacity){
         resize();

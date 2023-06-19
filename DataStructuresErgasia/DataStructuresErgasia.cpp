@@ -9,6 +9,7 @@
 #include "HashTable.h"
 #include "HashTable.cpp"
 #include "Avl.cpp"
+#include "BinaryTree.h"
 #include "BinaryTree.cpp"
 #include "Constants.h"
 
@@ -41,24 +42,25 @@ string removeAnnotation(string str)
 /*
     this function calculates and prints the time in different formats, needed for each structure to find the given keys
 */
-string showTime(chrono::steady_clock::time_point start, chrono::steady_clock::time_point end)
+string showTime(chrono::steady_clock::time_point start, chrono::steady_clock::time_point end, string format)
 {
     string returnString = ELLAPSED_TIME_IN;
-    if (TIME_FORMAT == MS)
+
+    if (format == MS)
     {
         int time = chrono::duration_cast<chrono::milliseconds>(end - start).count();
         returnString = returnString  + MILLISECONDS + to_string(time) + MS + NEWLINE;
 
         return returnString;
     }
-    if (TIME_FORMAT == NS)
+    if (format == NS)
     {
         int time = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
         returnString = returnString  + NANOSECONDS + to_string(time) + NS + NEWLINE;
 
         return returnString;
     }
-    if (TIME_FORMAT == SEC)
+    if (format == SEC)
     {
         int time = chrono::duration_cast<chrono::seconds>(end - start).count();
         returnString = returnString  + SECONDS + to_string(time) + SEC + NEWLINE;
@@ -82,7 +84,7 @@ string printHeadLine(string title){
     void searchUnsortedArray(UnsortedArray unsortedArray, ofstream &outputFile, string (&Q)[Q_SIZE]){
         chrono::steady_clock::time_point end, start;
         outputFile << printHeadLine(UNSORTED_ARRAY);
-        outputFile << unsortedArray.getTimeAs(TIME_FORMAT);
+        outputFile << unsortedArray.getBuildingTime();
         start = chrono::steady_clock::now();
 
         for (string q : Q)
@@ -90,33 +92,52 @@ string printHeadLine(string title){
             outputFile << unsortedArray.find(q);
         }
         end = chrono::steady_clock::now();
-        outputFile << showTime(start, end);
+        outputFile << showTime(start, end, UNORDERED_SEARCH_TIME_UNIT);
     }
 
 // /*
 //     Search the binary tree for the pairs in question, results to output file
 // */
-// void searchBinaryTree(BinaryTree binaryTree, ofstream &outputFile, string (&Q)[Q_SIZE]){
-//     chrono::steady_clock::time_point end, start;
-//     outputFile << printHeadLine(BINARY_TREE);
+void searchBinaryTree(BinaryTree binaryTree, ofstream &outputFile, string (&Q)[Q_SIZE]){
+    chrono::steady_clock::time_point end, start;
+    outputFile << printHeadLine(BINARY_TREE);
+    outputFile << binaryTree.getBuildingTime();
 
-//     start = chrono::steady_clock::now();
+    start = chrono::steady_clock::now();
 
-//     for (string q : Q)
-//     {
-//         outputFile << binaryTree.find(q);
-//     }
-//     end = chrono::steady_clock::now();
-//     outputFile << showTime(start, end);
-// }
+    for (string q : Q)
+    {
+        outputFile << binaryTree.find(q);
+    }
+    end = chrono::steady_clock::now();
+    outputFile << showTime(start, end, BINARY_TREE_SEARCH_TIME_UNIT);
+}
 
 /*
-    Search the binary tree for the pairs in question, results to output file
+    Search the avl tree for the pairs in question, results to output file
+*/
+void searchAVLTree(Avl avl, ofstream &outputFile, string (&Q)[Q_SIZE]){
+    chrono::steady_clock::time_point end, start;
+    outputFile << printHeadLine(AVL_TREE);
+    //outputFile << avl.getBuildingTime();
+
+    start = chrono::steady_clock::now();
+    for (string q : Q)
+    {
+        outputFile << avl.find(q);
+    }
+    end = chrono::steady_clock::now();
+
+    outputFile << showTime(start, end, AVL_TREE_SEARCH_TIME_UNIT);
+}
+
+/*
+    Search the hash table for the pairs in question, results to output file
 */
 void searchHashTable(HashTable hashTable, ofstream &outputFile, string (&Q)[Q_SIZE]){
     chrono::steady_clock::time_point end, start;
     outputFile << printHeadLine(HASH_TABLE);
-    outputFile << hashTable.getTimeAs(TIME_FORMAT);
+    outputFile << hashTable.getBuildingTime();
 
     start = chrono::steady_clock::now();
     for (string q : Q)
@@ -125,7 +146,7 @@ void searchHashTable(HashTable hashTable, ofstream &outputFile, string (&Q)[Q_SI
     }
     end = chrono::steady_clock::now();
 
-    outputFile << showTime(start, end);
+    outputFile << showTime(start, end, HASH_TABLE_SEARCH_TIME_UNIT);
 }
 
 int main()
@@ -145,7 +166,7 @@ int main()
         outputFile << COULD_NOT_OPEN + INPUT_FILE_NAME;
         return 1;
     }
-    
+
     // if one of the files can not be opened then the programm stops.
 
     string Q[Q_SIZE];
@@ -153,9 +174,10 @@ int main()
 
     int  QsetCounter = 0;
     srand(time(0));
-    UnsortedArray unsortedArray;
+    //UnsortedArray unsortedArray;
     HashTable hashTable;
     BinaryTree binaryTree;
+    //Avl avl;
 
 //  get each line of the file
     while (getline(inputFile,line))
@@ -169,8 +191,10 @@ int main()
             while ( stringStream >> currentWord){
                 pair = previousWord + " " + currentWord;
 
-                unsortedArray.insert(pair);
-                //binaryTree.insert(pair);
+                //unsortedArray.insert(pair);
+                binaryTree.insert(pair);
+                //avl.insert(pair);
+
                 hashTable.insert(pair);
 
                 previousWord = currentWord;
@@ -192,8 +216,9 @@ int main()
 
     chrono::steady_clock::time_point end, start;
 
-    searchUnsortedArray(unsortedArray, outputFile, Q);
-    //searchBinaryTree(binaryTree, outputFile, Q);
+    //searchAVLTree(avl, outputFile, Q);
+    //searchUnsortedArray(unsortedArray, outputFile, Q);
+    searchBinaryTree(binaryTree, outputFile, Q);
     searchHashTable(hashTable, outputFile, Q);
 
     outputFile.close();

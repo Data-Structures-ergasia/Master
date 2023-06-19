@@ -25,7 +25,7 @@ public:
 
 	void insert(std::string key);
 	std::string find(std::string key);
-    std::string getTimeAs(std::string format);
+    std::string getBuildingTime();
 
 	~UnsortedArray();
 };

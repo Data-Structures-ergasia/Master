@@ -1,39 +1,82 @@
-#include "BinaryTree.hpp"
+#include "BinaryTree.h"
+#include "Constants.h"
 #include <iostream>
+#include <chrono>
+#include <string>
+
+using namespace constants;
 using namespace std;
 
 BinaryTree::BinaryTree()
 {
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
+    chrono::milliseconds totalElapsedTime(0); 
+
     root = NULL;
+
+    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
+    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
+        
+    totalElapsedTime += elapsedTime;
 }
 
-void BinaryTree::find(string key)
+string BinaryTree::getBuildingTime(){
+    string returnString = BUILDING_TIME;
+
+    if (BINARY_TREE_BUILD_TIME_UNIT == MS)
+    {
+        int time = chrono::duration_cast<chrono::milliseconds>(totalElapsedTime).count();
+        returnString = returnString  + MILLISECONDS + to_string(time) + MS + NEWLINE;
+
+        return returnString;
+    }
+
+    if (BINARY_TREE_BUILD_TIME_UNIT == NS)
+    {
+        int time = chrono::duration_cast<chrono::nanoseconds>(totalElapsedTime).count();
+        returnString = returnString  + NANOSECONDS + to_string(time) + NS + NEWLINE;
+
+        return returnString;
+    }
+
+    if (BINARY_TREE_BUILD_TIME_UNIT == SEC)
+    {
+        int time = chrono::duration_cast<chrono::seconds>(totalElapsedTime).count();
+        returnString = returnString  + SECONDS + to_string(time) + SEC + NEWLINE;
+
+        return returnString;
+    }
+    return EMPTY;
+}
+
+string BinaryTree::find(string key)
 {
+    string returnString = KEY + key + RIGHT_QUOTATION_MARK;
     short compare;
     Node *temp = root;
     while (temp != NULL)
     {
         compare = temp->key.compare(key);
 
-        switch (compare)
-        {
-        case 1:
+        if (compare > 0){
             //goLeft
             temp = temp->left;
-            break;
-        case -1:
+        } else if (compare < 0){
             //goRight
             temp = temp->right;
-            break;
-        default:
-            cout << temp->key << " was found " << temp->found << " times. " << endl;
-            return;
+        } else {
+            returnString += WAS_FOUND + to_string(temp -> found) + TIMES + NEWLINE;
+            return returnString;
         }
+        
     }
+
+    return returnString + WAS_NOT_FOUND;
 }
 
 void BinaryTree::insert(string key)
 {
+    std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); 
 
     Node *newNode = new Node(key);
 
@@ -46,49 +89,50 @@ void BinaryTree::insert(string key)
     Node *temp = root;
     short compare;
 
+//search if the key exists
     while (temp != NULL)
     {
         compare = temp->key.compare(key);
 
-        switch (compare)
-        {
-        case 1:
+        if (compare > 0 ){
             //goLeft
             tempRoot = temp;
             temp = temp->left;
-            break;
-        case -1:
+        } else if (compare < 0){
             //goRight
             tempRoot = temp;
             temp = temp->right;
-            break;
-        default:
-            //already exists
+        } else {
+            //key was found
             temp->found++;
+
+            std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+            std::chrono::milliseconds elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+            totalElapsedTime += elapsedTime;
             return;
         }
     }
 
     compare = tempRoot->key.compare(key);
 
-    switch (compare)
-    {
-    case 1:
-       
+    if (compare > 0){
         tempRoot->left = newNode;
-        break;
-    case -1:
-        
+    } else if (compare < 0 ){
         tempRoot->right = newNode;
-        break;
-    default:
+    } else {
         tempRoot->found++;
     }
+
+    std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+    std::chrono::milliseconds elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+    totalElapsedTime += elapsedTime;
 }
 
 void BinaryTree::inorder()
 {
-    cout<<"Showing inorder traverse of bts :" <<endl;
+    cout<< IN_ORDER << NEWLINE;
 
     inorder(root);
 }
@@ -102,14 +146,14 @@ void BinaryTree::inorder(Node *node)
     }
 
     inorder(node->left);
-    cout << node->key << "  was found " << node->found << " times" << endl;
+    cout << KEY << node->key << RIGHT_QUOTATION_MARK << WAS_FOUND << node->found << TIMES << NEWLINE;
 
     inorder(node->right);
 }
 
 void BinaryTree::preorder()
 {
-    cout<<"Showing preorder traverse of bts :" <<endl;
+    cout<< PRE_ORDER <<endl;
 
     preorder(root);
 }
@@ -119,14 +163,16 @@ void BinaryTree::preorder(Node *node)
     if (node==NULL){
         return;
     }
-    cout << node->key << "  was found " << node->found << " times" << endl;
+    
+    cout << KEY << node->key << RIGHT_QUOTATION_MARK << WAS_FOUND << node->found << TIMES << NEWLINE;
+
     preorder(node->left);
     preorder(node->right);
 }
 
 void BinaryTree::postorder()
 {
-    cout<<"Showing postorder traverse of bts :" <<endl;
+    cout<< POST_ORDER <<endl;
     postorder(root);
 }
 
@@ -136,11 +182,30 @@ void BinaryTree::postorder(Node *node)
     {
         return;
     }
+
     postorder(node->left);
     postorder(node->right);
-    cout << node->key << "  was found " << node->found << " times" << endl;
+    
+    cout << KEY << node->key << RIGHT_QUOTATION_MARK << WAS_FOUND << node->found << TIMES << NEWLINE;
+}
+
+void BinaryTree::deleteBinaryTree(Node* node){
+    // if the tree is empty there is nothing to delete
+    if (node == NULL) {
+        return;
+    }
+ 
+    // delete left and right subtree
+    deleteBinaryTree(node->left);
+    deleteBinaryTree(node->right);
+    // delete the current node
+    delete node;
+    // set root as null to alert deletion
+    node = NULL;
 }
 
 BinaryTree::~BinaryTree()
 {
+    Node* del=root;
+    deleteBinaryTree(del);
 }

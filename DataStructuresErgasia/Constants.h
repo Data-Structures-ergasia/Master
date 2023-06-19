@@ -8,9 +8,8 @@ namespace constants{
     static std::string const OUTPUT_FILE_NAME = "output.txt";
 
     static std::string const ELLAPSED_TIME_IN = "Ellapsed time in ";
-    static std::string const BUILDING_TIME = "Building time";
+    static std::string const BUILDING_TIME = "Building time in ";
 
-    static std::string const TIME_FORMAT = "ms";
 
     static std::string const MS = "ms";
     static std::string const MILLISECONDS = "milliseconds: ";
@@ -20,6 +19,16 @@ namespace constants{
     
     static std::string const SEC = "sec";
     static std::string const SECONDS = "seconds: ";
+
+    static std::string const HASH_TABLE_BUILD_TIME_UNIT = MS;
+    static std::string const UNORDERED_ARRAY_BUILD_TIME_UNIT = MS;
+    static std::string const BINARY_TREE_BUILD_TIME_UNIT = NS;
+    static std::string const AVL_TREE_BUILD_TIME_UNIT = MS;
+
+    static std::string const HASH_TABLE_SEARCH_TIME_UNIT = MS;
+    static std::string const UNORDERED_SEARCH_TIME_UNIT = MS;
+    static std::string const BINARY_TREE_SEARCH_TIME_UNIT = MS;
+    static std::string const AVL_TREE_SEARCH_TIME_UNIT = MS;
 
     static std::string const NEWLINE = "\n";
     static std::string const TAB = "\t";
@@ -44,7 +53,12 @@ namespace constants{
     static std::string const WAS_NOT_FOUND = " was not found!";
     static std::string const TIMES = " times!";
 
-    static std::string const EMPTY = "";
+    static std::string const EMPTY = ""; 
+
+    static std::string const IN_ORDER = "Showing inorder traverse of bts :";
+    static std::string const POST_ORDER = "Showing postorder traverse of bts :";
+    static std::string const PRE_ORDER = "Showing preorder traverse of bts :";
+
 
 
     static int const Q_SIZE = 1000;

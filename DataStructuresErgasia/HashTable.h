@@ -30,6 +30,6 @@ class HashTable{
 
     void insert(std::string key);
     std::string get(std::string key);
-    std::string getTimeAs(std::string format);
+    std::string getBuildingTime();
 };
 #endif
