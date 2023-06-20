@@ -5,11 +5,20 @@ using namespace std;
 
 Avl::Avl()
 {
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
+    chrono::milliseconds totalElapsedTime(0); 
+
     root = NULL;
+
+    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
+    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
+        
+    totalElapsedTime += elapsedTime;
 }
 
 string Avl::find(string key)
 {
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
     short compare;
     AvlNode *temp = root;
     string returnString;
@@ -28,9 +37,14 @@ string Avl::find(string key)
         }
     }
     return "Key : " + key + " was not found!\n";
+    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
+    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
+        
+    totalElapsedTime += elapsedTime;
 }
 void Avl::insert(string key)
 {
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
     bool flag=false;
     AvlNode *newNode = new AvlNode(key);
     //if the tree does not exist we create its root with the given key
@@ -132,6 +146,38 @@ void Avl::insert(string key)
             Rotate(*flagtemp,true);
         }
     }
+    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
+    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
+        
+    totalElapsedTime += elapsedTime;
+}
+string Avl::getBuildingTime(){
+    string returnString = BUILDING_TIME;
+
+    if (AVL_TREE_BUILD_TIME_UNIT == MS)
+    {
+        int time = chrono::duration_cast<chrono::milliseconds>(totalElapsedTime).count();
+        returnString = returnString  + MILLISECONDS + to_string(time) + MS + NEWLINE;
+
+        return returnString;
+    }
+
+    if (AVL_TREE_BUILD_TIME_UNIT == NS)
+    {
+        int time = chrono::duration_cast<chrono::nanoseconds>(totalElapsedTime).count();
+        returnString = returnString  + NANOSECONDS + to_string(time) + NS + NEWLINE;
+
+        return returnString;
+    }
+
+    if (AVL_TREE_BUILD_TIME_UNIT == SEC)
+    {
+        int time = chrono::duration_cast<chrono::seconds>(totalElapsedTime).count();
+        returnString = returnString  + SECONDS + to_string(time) + SEC + NEWLINE;
+
+        return returnString;
+    }
+    return EMPTY;
 }
 //deleting the Avl tree
 Avl::~Avl()
