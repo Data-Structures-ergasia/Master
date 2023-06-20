@@ -6,7 +6,7 @@
 
 using namespace constants;
 using namespace std;
-
+// constructor, adding time passed to be more complete
 BinaryTree::BinaryTree()
 {
     chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
@@ -20,6 +20,7 @@ BinaryTree::BinaryTree()
     totalElapsedTime += elapsedTime;
 }
 
+// return the time it took for building the structure, i.e. inserting the keys
 string BinaryTree::getBuildingTime(){
     string returnString = BUILDING_TIME;
 
@@ -49,6 +50,7 @@ string BinaryTree::getBuildingTime(){
     return EMPTY;
 }
 
+// find the key in question, returns a string that is printed to the output file
 string BinaryTree::find(string key)
 {
     string returnString = KEY + key + RIGHT_QUOTATION_MARK;
@@ -74,6 +76,7 @@ string BinaryTree::find(string key)
     return returnString + WAS_NOT_FOUND;
 }
 
+// insert the key, if it exists increase its found field by one
 void BinaryTree::insert(string key)
 {
     std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); 
@@ -130,6 +133,7 @@ void BinaryTree::insert(string key)
     totalElapsedTime += elapsedTime;
 }
 
+// print the inorder of binary tree to the console
 void BinaryTree::inorder()
 {
     cout<< IN_ORDER << NEWLINE;
@@ -151,6 +155,7 @@ void BinaryTree::inorder(Node *node)
     inorder(node->right);
 }
 
+// print the preorder of the binary tree to the console
 void BinaryTree::preorder()
 {
     cout<< PRE_ORDER <<endl;
@@ -170,6 +175,7 @@ void BinaryTree::preorder(Node *node)
     preorder(node->right);
 }
 
+//print the postorder of binary  tree to the console
 void BinaryTree::postorder()
 {
     cout<< POST_ORDER <<endl;
@@ -189,6 +195,7 @@ void BinaryTree::postorder(Node *node)
     cout << KEY << node->key << RIGHT_QUOTATION_MARK << WAS_FOUND << node->found << TIMES << NEWLINE;
 }
 
+//delete the tree and free its space
 void BinaryTree::deleteBinaryTree(Node* node){
     // if the tree is empty there is nothing to delete
     if (node == NULL) {
