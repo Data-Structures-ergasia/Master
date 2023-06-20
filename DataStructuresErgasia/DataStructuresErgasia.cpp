@@ -9,6 +9,7 @@
 #include "HashTable.h"
 #include "HashTable.cpp"
 #include "Avl.cpp"
+#include "Avl.h"
 #include "BinaryTree.h"
 #include "BinaryTree.cpp"
 #include "Constants.h"
@@ -174,10 +175,11 @@ int main()
 
     int  QsetCounter = 0;
     srand(time(0));
+
     //UnsortedArray unsortedArray;
     HashTable hashTable;
-    BinaryTree binaryTree;
-    //Avl avl;
+    //BinaryTree binaryTree;
+    Avl avl;
 
 //  get each line of the file
     while (getline(inputFile,line))
@@ -192,9 +194,8 @@ int main()
                 pair = previousWord + " " + currentWord;
 
                 //unsortedArray.insert(pair);
-                binaryTree.insert(pair);
-                //avl.insert(pair);
-
+                //binaryTree.insert(pair);
+                avl.insert(pair);
                 hashTable.insert(pair);
 
                 previousWord = currentWord;
@@ -211,14 +212,13 @@ int main()
         }
     }
 
-
     inputFile.close();
 
     chrono::steady_clock::time_point end, start;
 
-    //searchAVLTree(avl, outputFile, Q);
+    searchAVLTree(avl, outputFile, Q);
     //searchUnsortedArray(unsortedArray, outputFile, Q);
-    searchBinaryTree(binaryTree, outputFile, Q);
+    //searchBinaryTree(binaryTree, outputFile, Q);
     searchHashTable(hashTable, outputFile, Q);
 
     outputFile.close();

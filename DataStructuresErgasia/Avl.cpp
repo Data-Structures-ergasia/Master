@@ -1,4 +1,4 @@
-#include "Avl.hpp"
+#include "Avl.h"
 #include <iostream>
 #include "Avl_Actions.cpp"
 using namespace std;
@@ -6,7 +6,7 @@ using namespace std;
 Avl::Avl()
 {
     root = NULL;
-}   
+}
 
 string Avl::find(string key)
 {
@@ -17,18 +17,14 @@ string Avl::find(string key)
     {
         compare = temp->key.compare(key);
 
-        switch (compare)
-        {
-        case 1:
+        if (compare > 0){
             //goLeft
             temp = temp->left;
-            break;
-        case -1:
+        } else if (compare < 0){
             //goRight
             temp = temp->right;
-            break;
-        default:
-            return "Key :\"" +key + "\" was found " + to_string(temp->found) + " times!\n";
+        } else {
+            return "Key : \"" +key + "\" was found " + to_string(temp->found) + " times!\n";
         }
     }
     return "Key : " + key + " was not found!\n";
@@ -46,33 +42,32 @@ void Avl::insert(string key)
     AvlNode *tempRoot = NULL;
     AvlNode *temp = root;
     AvlNode *flagtemp=NULL;
+
     short compare;
     while (temp != NULL && !flag)
     {
         compare = temp->key.compare(key);
         temp->height++;
-        switch (compare)
-        {
-        //goLeft
-        case 1:
+
+        if (compare > 0){
+            //goLeft
             //checking if the tree below has a problem, if it does we flag the node we already are in order to fix the tree
             if(NodeTreeHeight(temp->left)+1>NodeTreeHeight(temp->right)+2){
-            flagtemp=temp;
+                flagtemp=temp;
             }
+
             tempRoot = temp;
             temp = temp->left;
-            break;
+        } else if (compare < 0){
         //goRight
-        case -1:
-            //checking if the tree below has a problem, if it does we flag the node we already are in order to fix the tree
+        //checking if the tree below has a problem, if it does we flag the node we already are in order to fix the tree
             if( NodeTreeHeight(temp->right)+1>NodeTreeHeight(temp->left)+2){
-                flagtemp=temp;
+                    flagtemp=temp;
             }
             tempRoot = temp;
             temp = temp->right;
-            break;
-        //the given key exists, so the extra heights we have added are false so we alert the problem with a flag
-        default:
+        } else {
+            //the given key exists, so the extra heights we have added are false so we alert the problem with a flag
             flag=true;
             temp->found++;
         }
@@ -86,19 +81,15 @@ void Avl::insert(string key)
         {
             compare = temp->key.compare(key);
             temp->height--;
-            switch (compare)
-            {
-                case 1:
+            if (compare > 0){
                 //goLeft
                 tempRoot = temp;
                 temp = temp->left;
-                break;
-                case -1:
+            } else if (compare < 0){
                 //goRight
                 tempRoot = temp;
                 temp = temp->right;
-                break;
-                default:
+            } else {
                 return;
             }
         }
@@ -107,25 +98,19 @@ void Avl::insert(string key)
     newNode->parent=tempRoot;
     compare = tempRoot->key.compare(key);
     //we determine if the new node needs to go to the right or left child of tempRoot
-    switch (compare)
-    {
-    case 1:
-       
+    if (compare > 0){
         tempRoot->left = newNode;
-        break;
-    case -1:
-        
+    } else if (compare < 0 ){
         tempRoot->right = newNode;
-        break;
-    default:
+    } else {
         tempRoot->found++;
     }
+
     //we check if the tree needs fixing
-    //cout<<flagtemp->key<<endl;
     if(flagtemp!=NULL && !flag){
-        if(flagtemp->key.compare(key)==1){
+        if(flagtemp->key.compare(key) > 0){
             //checking if we continue going left
-            if(flagtemp->left->key.compare(key)==1){
+            if(flagtemp->left->key.compare(key) > 0){
                 Rotate(*flagtemp,false);
                 return;
             }
@@ -134,16 +119,16 @@ void Avl::insert(string key)
             Rotate(*flagtemp->left,true);
             //secong we make a right turn of the tree of flagtemp
             Rotate(*flagtemp,false);
-        }else if(flagtemp->key.compare(key)==-1){
+        }else if(flagtemp->key.compare(key) < 0){
             //checking if we continue going right
-            if(flagtemp->right->key.compare(key)==-1){
+            if(flagtemp->right->key.compare(key) < 0){
                 Rotate(*flagtemp,true);
                 return;
             }
             //we turned from left to right so we have an RL problem
             //first we make a right turn of the tree below our flagtemp
             Rotate(*flagtemp->right,false);
-            //secong we make a left turn of the tree of flagtemp
+            //second we make a left turn of the tree of flagtemp
             Rotate(*flagtemp,true);
         }
     }
