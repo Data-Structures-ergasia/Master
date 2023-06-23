@@ -33,6 +33,9 @@ private:
 
 	Node *root;
 
+	int compare(std::string s1, std::string s2);
+	void calculateTime(chrono::steady_clock::time_point startTime);
+
 	void inorder(Node *node);
 	void postorder(Node *node);
 	void preorder(Node *node);

@@ -6,12 +6,14 @@
 #include <string.h>
 #include "UnsortedArray.h"
 #include "UnsortedArray.cpp"
+#include "SortedArray.h"
+#include "SortedArray.cpp"
 #include "HashTable.h"
 #include "HashTable.cpp"
-#include "Avl.cpp"
-#include "Avl.h"
 #include "BinaryTree.h"
 #include "BinaryTree.cpp"
+#include "AVl.h"
+#include "Avl.cpp"
 #include "Constants.h"
 
 using namespace std;
@@ -93,7 +95,21 @@ string printHeadLine(string title){
             outputFile << unsortedArray.find(q);
         }
         end = chrono::steady_clock::now();
-        outputFile << showTime(start, end, UNORDERED_SEARCH_TIME_UNIT);
+        outputFile << showTime(start, end, UNSORTED_SEARCH_TIME_UNIT);
+    }
+
+    void searchSortedArray(SortedArray sortedArray, ofstream &outputFile, string (&Q)[Q_SIZE]){
+        chrono::steady_clock::time_point end, start;
+        outputFile << printHeadLine(SORTED_ARRAY);
+        outputFile << sortedArray.getBuildingTime();
+        start = chrono::steady_clock::now();
+
+        for (string q : Q)
+        {
+            outputFile << sortedArray.find(q);
+        }
+        end = chrono::steady_clock::now();
+        outputFile << showTime(start, end, UNSORTED_SEARCH_TIME_UNIT);
     }
 
 // /*
@@ -120,7 +136,7 @@ void searchBinaryTree(BinaryTree binaryTree, ofstream &outputFile, string (&Q)[Q
 void searchAVLTree(Avl avl, ofstream &outputFile, string (&Q)[Q_SIZE]){
     chrono::steady_clock::time_point end, start;
     outputFile << printHeadLine(AVL_TREE);
-    //outputFile << avl.getBuildingTime();
+    outputFile << avl.getBuildingTime();
 
     start = chrono::steady_clock::now();
     for (string q : Q)
@@ -176,10 +192,11 @@ int main()
     int  QsetCounter = 0;
     srand(time(0));
 
-    //UnsortedArray unsortedArray;
+    UnsortedArray unsortedArray;
+  //  SortedArray sortedArray;
     HashTable hashTable;
     //BinaryTree binaryTree;
-    Avl avl;
+    //Avl avl;
 
 //  get each line of the file
     while (getline(inputFile,line))
@@ -193,9 +210,10 @@ int main()
             while ( stringStream >> currentWord){
                 pair = previousWord + " " + currentWord;
 
-                //unsortedArray.insert(pair);
+                unsortedArray.insert(pair);
+                //sortedArray.insert(pair);
                 //binaryTree.insert(pair);
-                avl.insert(pair);
+                //avl.insert(pair);
                 hashTable.insert(pair);
 
                 previousWord = currentWord;
@@ -211,17 +229,22 @@ int main()
             }
         }
     }
-
     inputFile.close();
 
     chrono::steady_clock::time_point end, start;
 
-    searchAVLTree(avl, outputFile, Q);
-    //searchUnsortedArray(unsortedArray, outputFile, Q);
-    //searchBinaryTree(binaryTree, outputFile, Q);
+
+    // for (long long int i = 0 ; i < sortedArray.getSize() ; i ++){
+    //     outputFile << sortedArray.get(i);
+    // }
+
+    //searchAVLTree(avl, outputFile, Q);
+    searchUnsortedArray(unsortedArray, outputFile, Q);
+    //searchSortedArray(sortedArray, outputFile, Q);
+   // searchBinaryTree(binaryTree, outputFile, Q);
     searchHashTable(hashTable, outputFile, Q);
 
     outputFile.close();
 
     return 0;
-}
+    }

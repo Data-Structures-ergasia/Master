@@ -6,42 +6,50 @@ using namespace std;
 Avl::Avl()
 {
     chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
-    chrono::milliseconds totalElapsedTime(0); 
+    chrono::nanoseconds totalElapsedTime(0); 
 
     root = NULL;
 
-    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
-    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
-        
-    totalElapsedTime += elapsedTime;
+    calculateTime(startTime);
 }
 
 string Avl::find(string key)
 {
-    chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
-    short compare;
+    int comparison;
     AvlNode *temp = root;
-    string returnString;
+    string returnString = KEY + key + RIGHT_QUOTATION_MARK;
+
     while (temp != NULL)
     {
-        compare = temp->key.compare(key);
+        comparison = compare(temp->key, key);
 
-        if (compare > 0){
+        if (comparison > 0){
             //goLeft
             temp = temp->left;
-        } else if (compare < 0){
+        } else if (comparison < 0){
             //goRight
             temp = temp->right;
         } else {
-            return "Key : \"" +key + "\" was found " + to_string(temp->found) + " times!\n";
+            returnString += WAS_FOUND + to_string(temp -> found) + TIMES + NEWLINE;
+            return returnString;
         }
     }
-    return "Key : " + key + " was not found!\n";
+
+    return returnString + WAS_NOT_FOUND + NEWLINE;
+}
+
+int Avl::compare(string s1, string s2){
+    return s1.compare(s2);
+
+}
+
+void Avl::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
-    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
+    chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
         
     totalElapsedTime += elapsedTime;
 }
+
 void Avl::insert(string key)
 {
     chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
@@ -51,19 +59,20 @@ void Avl::insert(string key)
     if (root == NULL)
     {
         root = newNode;
+        calculateTime(startTime);
         return;
     }
     AvlNode *tempRoot = NULL;
     AvlNode *temp = root;
     AvlNode *flagtemp=NULL;
 
-    short compare;
+    int comparison;
     while (temp != NULL && !flag)
     {
-        compare = temp->key.compare(key);
+        comparison = compare(temp->key, key);
         temp->height++;
 
-        if (compare > 0){
+        if (comparison > 0){
             //goLeft
             //checking if the tree below has a problem, if it does we flag the node we already are in order to fix the tree
             if(NodeTreeHeight(temp->left)+1>NodeTreeHeight(temp->right)+2){
@@ -72,7 +81,7 @@ void Avl::insert(string key)
 
             tempRoot = temp;
             temp = temp->left;
-        } else if (compare < 0){
+        } else if (comparison < 0){
         //goRight
         //checking if the tree below has a problem, if it does we flag the node we already are in order to fix the tree
             if( NodeTreeHeight(temp->right)+1>NodeTreeHeight(temp->left)+2){
@@ -93,28 +102,29 @@ void Avl::insert(string key)
         temp=root;
         while (temp != NULL)
         {
-            compare = temp->key.compare(key);
+            comparison = compare(temp->key, key);
             temp->height--;
-            if (compare > 0){
+            if (comparison > 0){
                 //goLeft
                 tempRoot = temp;
                 temp = temp->left;
-            } else if (compare < 0){
+            } else if (comparison < 0){
                 //goRight
                 tempRoot = temp;
                 temp = temp->right;
             } else {
+                calculateTime(startTime);
                 return;
             }
         }
     }
     //the parent of the new node is the tempRoot which is the previous node
     newNode->parent=tempRoot;
-    compare = tempRoot->key.compare(key);
+    comparison = compare(tempRoot->key, key);
     //we determine if the new node needs to go to the right or left child of tempRoot
-    if (compare > 0){
+    if (comparison > 0){
         tempRoot->left = newNode;
-    } else if (compare < 0 ){
+    } else if (comparison < 0 ){
         tempRoot->right = newNode;
     } else {
         tempRoot->found++;
@@ -122,10 +132,13 @@ void Avl::insert(string key)
 
     //we check if the tree needs fixing
     if(flagtemp!=NULL && !flag){
-        if(flagtemp->key.compare(key) > 0){
+        if(compare(flagtemp->key, key) > 0){
             //checking if we continue going left
-            if(flagtemp->left->key.compare(key) > 0){
+            if(compare(flagtemp->left->key, key) > 0){
                 Rotate(*flagtemp,false);
+                
+                calculateTime(startTime);
+
                 return;
             }
             //we turned from left to right so we have an LR problem
@@ -133,10 +146,13 @@ void Avl::insert(string key)
             Rotate(*flagtemp->left,true);
             //secong we make a right turn of the tree of flagtemp
             Rotate(*flagtemp,false);
-        }else if(flagtemp->key.compare(key) < 0){
+        }else if(compare(flagtemp->key, key) < 0){
             //checking if we continue going right
-            if(flagtemp->right->key.compare(key) < 0){
+            if(compare(flagtemp->right->key, key) < 0){
                 Rotate(*flagtemp,true);
+        
+                calculateTime(startTime);
+
                 return;
             }
             //we turned from left to right so we have an RL problem
@@ -146,10 +162,8 @@ void Avl::insert(string key)
             Rotate(*flagtemp,true);
         }
     }
-    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
-    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
-        
-    totalElapsedTime += elapsedTime;
+    
+    calculateTime(startTime);
 }
 string Avl::getBuildingTime(){
     string returnString = BUILDING_TIME;

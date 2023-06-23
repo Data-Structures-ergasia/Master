@@ -10,12 +10,20 @@ using namespace std;
 BinaryTree::BinaryTree()
 {
     chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
-    chrono::milliseconds totalElapsedTime(0); 
+    chrono::nanoseconds totalElapsedTime(0); 
 
     root = NULL;
 
+    calculateTime(startTime);
+}
+
+int BinaryTree::compare(string s1, string s2){
+    return s1.compare(s2);
+}
+
+void BinaryTree::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
-    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
+    chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
         
     totalElapsedTime += elapsedTime;
 }
@@ -54,16 +62,16 @@ string BinaryTree::getBuildingTime(){
 string BinaryTree::find(string key)
 {
     string returnString = KEY + key + RIGHT_QUOTATION_MARK;
-    short compare;
+    int comparison;
     Node *temp = root;
     while (temp != NULL)
     {
-        compare = temp->key.compare(key);
+        comparison = compare(temp->key, key);
 
-        if (compare > 0){
+        if (comparison > 0){
             //goLeft
             temp = temp->left;
-        } else if (compare < 0){
+        } else if (comparison < 0){
             //goRight
             temp = temp->right;
         } else {
@@ -73,7 +81,7 @@ string BinaryTree::find(string key)
         
     }
 
-    return returnString + WAS_NOT_FOUND;
+    return returnString + WAS_NOT_FOUND + NEWLINE;
 }
 
 // insert the key, if it exists increase its found field by one
@@ -90,18 +98,18 @@ void BinaryTree::insert(string key)
     }
     Node *tempRoot = NULL;
     Node *temp = root;
-    short compare;
+    int comparison;
 
 //search if the key exists
     while (temp != NULL)
     {
-        compare = temp->key.compare(key);
+        comparison = compare(temp->key, key);
 
-        if (compare > 0 ){
+        if (comparison > 0 ){
             //goLeft
             tempRoot = temp;
             temp = temp->left;
-        } else if (compare < 0){
+        } else if (comparison < 0){
             //goRight
             tempRoot = temp;
             temp = temp->right;
@@ -109,28 +117,23 @@ void BinaryTree::insert(string key)
             //key was found
             temp->found++;
 
-            std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
-            std::chrono::milliseconds elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-
-            totalElapsedTime += elapsedTime;
+            calculateTime(startTime);
             return;
         }
     }
 
-    compare = tempRoot->key.compare(key);
-
-    if (compare > 0){
+    comparison = compare(tempRoot->key, key);
+    
+    // insert the new node to the correct "side"
+    if (comparison > 0){
         tempRoot->left = newNode;
-    } else if (compare < 0 ){
+    } else if (comparison < 0 ){
         tempRoot->right = newNode;
     } else {
         tempRoot->found++;
     }
 
-    std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
-    std::chrono::milliseconds elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-
-    totalElapsedTime += elapsedTime;
+    calculateTime(startTime);
 }
 
 // print the inorder of binary tree to the console

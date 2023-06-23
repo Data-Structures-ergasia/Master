@@ -13,9 +13,12 @@ class HashTable{
 	};
 
 	entry **array;
-    std::chrono::milliseconds totalElapsedTime;
+    std::chrono::nanoseconds totalElapsedTime;
     size_t capacity;
 	size_t size;
+
+    int compare(std::string s1, std::string s2);
+	void calculateTime(chrono::steady_clock::time_point startTime);
 
 	void resize();
     void insertIntoTable(entry** tableToInsertTo, std::string key);

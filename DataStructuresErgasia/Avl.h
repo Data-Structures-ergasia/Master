@@ -38,11 +38,15 @@ class Avl
 {
 private:
 	AvlNode *root;
-	
+    std::chrono::nanoseconds totalElapsedTime;
+
+	void calculateTime(chrono::steady_clock::time_point startTime);
+	int compare(std::string s1, std::string s2);
 public:
 	Avl();
 	void insert(string key);
 	string find(string key);
+    std::string getBuildingTime();
 	~Avl();
 };
 #endif

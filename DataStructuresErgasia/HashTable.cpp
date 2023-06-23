@@ -11,7 +11,7 @@ using namespace std;
 //constructor, initialize pointers for all elements
 HashTable::HashTable(){
     chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
-    chrono::milliseconds totalElapsedTime(0); 
+    chrono::nanoseconds totalElapsedTime(0); 
 
     capacity = ARRAY_SIZE;
     size = 0;
@@ -27,11 +27,21 @@ HashTable::HashTable(){
         cout << NOT_ENOUGH_MEMORY;
     }
 
+    calculateTime(startTime);
+}
+
+
+int HashTable::compare(string s1, string s2){
+    return s1.compare(s2);
+}
+
+void HashTable::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
-    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
+    chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
         
     totalElapsedTime += elapsedTime;
 }
+
 
 // delete each pointer of the array and then the array as a whole
 HashTable::~HashTable(){
@@ -86,7 +96,7 @@ void HashTable::resize()
 // take mod capacity to ensure we won't get a value that is out of bounds
 size_t HashTable::hash(string key){
     size_t hashValue = 0;
-    for (size_t i = 0 ; i < key.size(); i++ ){
+    for (long int i = 0 ; i < key.size(); i++ ){
         hashValue = hashValue * 31 + key[i];
     }
     
@@ -105,10 +115,9 @@ void HashTable::insertIntoTable(entry** tableToInsertTo, string key, unsigned in
     size_t position = hash(key);
 
     while (tableToInsertTo[position] -> occupied) {
-        short compare = tableToInsertTo[position] -> key.compare(key);
 
         // the key at position is the same as the one that is being inserted 
-        if (compare == 0){
+        if (compare(tableToInsertTo[position] -> key, key) == 0){
             tableToInsertTo[position] -> found++;
             return; 
         }
@@ -131,10 +140,8 @@ void HashTable::insertIntoTable(entry** tableToInsertTo, string key){
     size_t position = hash(key);
 
     while (tableToInsertTo[position] -> occupied) {
-        short compare = tableToInsertTo[position] -> key.compare(key);
-
         // the key at position is the same as the one that is being inserted 
-        if (compare == 0){
+        if (compare(tableToInsertTo[position] -> key, key) == 0){
             tableToInsertTo[position] -> found++;
             tableToInsertTo[position] -> key = key; 
             return;
@@ -162,10 +169,7 @@ void HashTable::insert(string key){
 
     insertIntoTable(array, key);
 
-    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
-    chrono::milliseconds elapsedTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
-        
-    totalElapsedTime += elapsedTime;
+    calculateTime(startTime);
 }
 
 // get the string in question
@@ -180,8 +184,7 @@ string HashTable::get(string key){
     size_t initialPosition = position;
 
     while (array[position] -> occupied){
-        short compare = array[position] -> key.compare(key);
-        if (compare == 0){
+        if (compare(array[position] -> key, key) == 0){
             returnString += WAS_FOUND + to_string(array[position] -> found) + TIMES + NEWLINE;
             return returnString;            
         }
