@@ -30,6 +30,9 @@ HashTable::HashTable(){
     calculateTime(startTime);
 }
 
+size_t HashTable::getSize(){
+    return size;
+}
 
 int HashTable::compare(string s1, string s2){
     return s1.compare(s2);

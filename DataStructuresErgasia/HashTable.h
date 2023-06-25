@@ -31,6 +31,8 @@ class HashTable{
     HashTable();
     ~HashTable();
 
+    size_t getSize();
+
     void insert(std::string key);
     std::string get(std::string key);
     std::string getBuildingTime();

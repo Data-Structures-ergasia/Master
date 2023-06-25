@@ -192,10 +192,10 @@ int main()
     int  QsetCounter = 0;
     srand(time(0));
 
-    UnsortedArray unsortedArray;
+   // UnsortedArray unsortedArray;
   //  SortedArray sortedArray;
-    HashTable hashTable;
-    //BinaryTree binaryTree;
+  //  HashTable hashTable;
+    BinaryTree binaryTree;
     //Avl avl;
 
 //  get each line of the file
@@ -210,11 +210,11 @@ int main()
             while ( stringStream >> currentWord){
                 pair = previousWord + " " + currentWord;
 
-                unsortedArray.insert(pair);
+                //unsortedArray.insert(pair);
                 //sortedArray.insert(pair);
-                //binaryTree.insert(pair);
+                binaryTree.insert(pair);
                 //avl.insert(pair);
-                hashTable.insert(pair);
+                //hashTable.insert(pair);
 
                 previousWord = currentWord;
 
@@ -233,16 +233,15 @@ int main()
 
     chrono::steady_clock::time_point end, start;
 
-
     // for (long long int i = 0 ; i < sortedArray.getSize() ; i ++){
     //     outputFile << sortedArray.get(i);
     // }
 
     //searchAVLTree(avl, outputFile, Q);
-    searchUnsortedArray(unsortedArray, outputFile, Q);
+    //searchUnsortedArray(unsortedArray, outputFile, Q);
     //searchSortedArray(sortedArray, outputFile, Q);
-   // searchBinaryTree(binaryTree, outputFile, Q);
-    searchHashTable(hashTable, outputFile, Q);
+    searchBinaryTree(binaryTree, outputFile, Q);
+    //searchHashTable(hashTable, outputFile, Q);
 
     outputFile.close();
 

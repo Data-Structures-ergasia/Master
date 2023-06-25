@@ -19,8 +19,6 @@ private:
 
 	int compare(std::string s1, std::string s2);
 	void calculateTime(std::chrono::steady_clock::time_point startTime);
-	void insertIntoTable(entry** tableToInsertTo, std::string key, unsigned int found);
-	void insertIntoTable(entry** tableToInsertTo, std::string key);
 	void resize();
 public:
 	UnsortedArray();

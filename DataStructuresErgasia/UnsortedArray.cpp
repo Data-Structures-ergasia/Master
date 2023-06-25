@@ -108,7 +108,8 @@ void UnsortedArray::resize()
     if (temp != NULL)
     {
         for (size_t i = 0; i < oldCapacity ; i++){
-            insertIntoTable(temp, array[i] -> key, array[i] -> found);
+            temp[i] -> key = array[i] -> key;
+            temp[i] -> found = array[i] -> found;
         }
 
         for (size_t i = 0 ; i < oldCapacity ; i++){
@@ -118,43 +119,13 @@ void UnsortedArray::resize()
         delete [] array;
 
         array = temp;
+
     }
     else
     {
         cout << NOT_ENOUGH_MEMORY_TO_RESIZE << NEWLINE;
         exit(1);
     }
-}
-
-void UnsortedArray::insertIntoTable(entry** tableToInsertTo, string key, unsigned int found){
-    for (size_t i = 0; i < size; i++)
-    {
-        if (compare(tableToInsertTo[i] -> key, key) == 0)
-        {
-            tableToInsertTo[i] -> found ++;
-            return;
-        }
-    }
-
-    tableToInsertTo[size] -> key = key;
-    tableToInsertTo[size] -> found = found;
-    size++;
-}
-
-void UnsortedArray::insertIntoTable(entry** tableToInsertTo, string key){
-    for (size_t i = 0; i < size; i++)
-    {
-        short compare = tableToInsertTo[i] -> key.compare(key);
-        if (compare == 0)
-        {
-            tableToInsertTo[i] -> found ++;
-            return;            
-        }
-    }
-    
-    tableToInsertTo[size] -> key = key;
-    tableToInsertTo[size] -> found = 1;
-    size++;
 }
 
 void UnsortedArray::insert(string key)
@@ -165,7 +136,18 @@ void UnsortedArray::insert(string key)
         resize();
     }
 
-    insertIntoTable(array,key);
+    for (size_t i = 0; i < size; i++)
+    {
+        if (compare(array[i] -> key, key) == 0)
+        {
+            array[i] -> found ++;
+            return;            
+        }
+    }
+    
+    array[size] -> key = key;
+    array[size] -> found = 1;
+    size++;
     
     calculateTime(startTime);
 }
