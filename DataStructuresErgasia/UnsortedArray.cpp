@@ -7,6 +7,7 @@
 using namespace constants;
 using namespace std;
 
+//constructor, initialize pointers for all elements
 UnsortedArray::UnsortedArray()
 {
     chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
@@ -28,6 +29,7 @@ UnsortedArray::UnsortedArray()
     calculateTime(startTime);
 }
 
+// delete each pointer of the array and then the array as a whole
 UnsortedArray::~UnsortedArray()
 {
     for (size_t i = 0 ; i < capacity ; i++){
@@ -37,10 +39,12 @@ UnsortedArray::~UnsortedArray()
     delete[] array;
 }
 
+// compare the two strings, s1: existing key, s2: key to insert
 int UnsortedArray::compare(string s1, string s2){
     return s1.compare(s2);
 }
 
+// calculate time passed in nanosecods (better accuracy)
 void UnsortedArray::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
     chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
@@ -75,6 +79,9 @@ string UnsortedArray::getBuildingTime(){
     return EMPTY;
 }
 
+// find the string in question
+// search the array linearly,
+// returns a string that is printed to the output file
 string UnsortedArray::find(string key)
 {
     string returnString = KEY + key + RIGHT_QUOTATION_MARK;
@@ -91,6 +98,7 @@ string UnsortedArray::find(string key)
     return returnString;
 }
 
+// resize the table by capacity/2, each element is re inserted to its new position
 void UnsortedArray::resize()
 {
     size_t newCapacity = capacity + capacity/2 ;
@@ -128,6 +136,7 @@ void UnsortedArray::resize()
     }
 }
 
+// insert the key in question to the array, use linear search to check whether it exists or not
 void UnsortedArray::insert(string key)
 {
     std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); 

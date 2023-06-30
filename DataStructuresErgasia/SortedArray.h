@@ -11,12 +11,13 @@ private:
 		unsigned int found;
 	};
 
-    std::chrono::milliseconds totalElapsedTime;
+    std::chrono::nanoseconds totalElapsedTime;
 	entry **array;
 	long long int capacity;
 	long long int size;
 
 	int compare(std::string s1, std::string s2);
+	void calculateTime(chrono::steady_clock::time_point startTime);
 	long long int findPositionOf(std::string key);
 	void resize();
 public:
@@ -25,8 +26,7 @@ public:
 	void insert(std::string key);
 	std::string find(std::string key);
     std::string getBuildingTime();
-	std::string get(long long int i);
-	long long int getSize();
+
 	~SortedArray();
 };
 

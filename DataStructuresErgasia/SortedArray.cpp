@@ -7,11 +7,11 @@
 using namespace constants;
 using namespace std;
 
-
+//constructor, initialize pointers for all elements
 SortedArray::SortedArray()
 {
     chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
-    chrono::milliseconds totalElapsedTime(0); 
+    chrono::nanoseconds totalElapsedTime(0); 
 
     capacity = ARRAY_SIZE;
     size = 0;
@@ -26,12 +26,10 @@ SortedArray::SortedArray()
         cout << NOT_ENOUGH_MEMORY;
     }
 
-    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
-    chrono::milliseconds elapsedTime = chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-        
-    totalElapsedTime += elapsedTime;
+    calculateTime(startTime);
 }
 
+// delete each pointer of the array and then the array as a whole
 SortedArray::~SortedArray()
 {
     for (long long int i = 0 ; i < capacity ; i++){
@@ -68,19 +66,31 @@ string SortedArray::getBuildingTime(){
     return EMPTY;
 }
 
+// compare the two strings, s1: existing key, s2: key to insert
 int SortedArray::compare(string s1, string s2){
     return s1.compare(s2);
 }
 
+// calculate time passed in nanosecods (better accuracy)
+void SortedArray::calculateTime(chrono::steady_clock::time_point startTime){
+    chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
+    chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
+        
+    totalElapsedTime += elapsedTime;
+}
+
+// find the string in question
+// search the array using binary search (findPositionOf),
+// returns a string that is printed to the output file
 string SortedArray::find(string key)
 {
     string returnString = KEY + key + RIGHT_QUOTATION_MARK;
 
     long long int position = findPositionOf(key);
 
-    int compar = compare(array[position] -> key, key);
+    int comparison = compare(array[position] -> key, key);
 
-    if (compar == 0){
+    if (comparison == 0){
         returnString += WAS_FOUND + to_string(array[position] -> found) + TIMES + NEWLINE;
         return returnString;
     }
@@ -89,6 +99,8 @@ string SortedArray::find(string key)
      return returnString;
 }
 
+// Use binary search to find the position of the key in question,
+// if it doesn't exist, it returns the correct position to be inserted.
 long long int SortedArray::findPositionOf(string key){
     long long int low = 0;
     long long int high = size - 1;
@@ -120,6 +132,8 @@ long long int SortedArray::findPositionOf(string key){
     return mid;
 }              
 
+// insert element in question to the array using the findPositionOf function,
+// if it didn't exist, place it at the appropriate position and shift elements to the right.
 void SortedArray::insert(string key){
     std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
     if (size == 0){
@@ -136,7 +150,6 @@ void SortedArray::insert(string key){
     }
 
     long long int position = findPositionOf(key);
-
     //shift elements to the right
     int comparison = compare(array[position] -> key, key);
     if (comparison == 0 ){
@@ -155,20 +168,10 @@ void SortedArray::insert(string key){
     array[position] -> found = 1;
     array[position] -> key = key;
 
-    std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
-    std::chrono::milliseconds elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-        
-    totalElapsedTime += elapsedTime;
+    calculateTime(startTime);
 }
 
-string SortedArray::get(long long int i){
-    return array[i] -> key + " was found: " +  to_string(array[i] -> found) + NEWLINE;
-}
-
-long long int SortedArray::getSize(){
-    return size;
-}
-
+// resize the table by capacity/2, each element is re inserted to its new position
 void SortedArray::resize(){
     long long int newCapacity = capacity + capacity/2 ;
     long long int oldCapacity = capacity;
@@ -193,10 +196,9 @@ void SortedArray::resize(){
             delete array[i];
         }
 
-        delete [] array;
+        delete[] array;
 
         array = temp;
-        cout << "new capacity : " << capacity << endl;
     }
     else
     {

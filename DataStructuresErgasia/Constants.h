@@ -27,7 +27,7 @@ namespace constants{
     static std::string const AVL_TREE_BUILD_TIME_UNIT = NS;
 
     static std::string const HASH_TABLE_SEARCH_TIME_UNIT = MS;
-    static std::string const UNSORTED_SEARCH_TIME_UNIT = MS;
+    static std::string const UNSORTED_ARRAY_SEARCH_TIME_UNIT = MS;
     static std::string const SORTED_ARRAY_SEARCH_TIME_UNIT = MS;
     static std::string const BINARY_TREE_SEARCH_TIME_UNIT = MS;
     static std::string const AVL_TREE_SEARCH_TIME_UNIT = NS;
@@ -56,10 +56,6 @@ namespace constants{
     static std::string const TIMES = " times!";
 
     static std::string const EMPTY = ""; 
-
-    static std::string const IN_ORDER = "Showing inorder traverse of bts :";
-    static std::string const POST_ORDER = "Showing postorder traverse of bts :";
-    static std::string const PRE_ORDER = "Showing preorder traverse of bts :";
 
     static int const Q_SIZE = 1000;
     static int const ARRAY_SIZE = 10000000;

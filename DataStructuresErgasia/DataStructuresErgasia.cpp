@@ -82,89 +82,90 @@ string printHeadLine(string title){
 }
 
 /*
-    Search the unsorted array for the pairs in question, results to output file
-*/
-    void searchUnsortedArray(UnsortedArray unsortedArray, ofstream &outputFile, string (&Q)[Q_SIZE]){
-        chrono::steady_clock::time_point end, start;
-        outputFile << printHeadLine(UNSORTED_ARRAY);
-        outputFile << unsortedArray.getBuildingTime();
-        start = chrono::steady_clock::now();
-
-        for (string q : Q)
-        {
-            outputFile << unsortedArray.find(q);
-        }
-        end = chrono::steady_clock::now();
-        outputFile << showTime(start, end, UNSORTED_SEARCH_TIME_UNIT);
-    }
-
-    void searchSortedArray(SortedArray sortedArray, ofstream &outputFile, string (&Q)[Q_SIZE]){
-        chrono::steady_clock::time_point end, start;
-        outputFile << printHeadLine(SORTED_ARRAY);
-        outputFile << sortedArray.getBuildingTime();
-        start = chrono::steady_clock::now();
-
-        for (string q : Q)
-        {
-            outputFile << sortedArray.find(q);
-        }
-        end = chrono::steady_clock::now();
-        outputFile << showTime(start, end, UNSORTED_SEARCH_TIME_UNIT);
-    }
-
-// /*
-//     Search the binary tree for the pairs in question, results to output file
-// */
-void searchBinaryTree(BinaryTree binaryTree, ofstream &outputFile, string (&Q)[Q_SIZE]){
-    chrono::steady_clock::time_point end, start;
-    outputFile << printHeadLine(BINARY_TREE);
-    outputFile << binaryTree.getBuildingTime();
-
-    start = chrono::steady_clock::now();
-
-    for (string q : Q)
-    {
-        outputFile << binaryTree.find(q);
-    }
-    end = chrono::steady_clock::now();
-    outputFile << showTime(start, end, BINARY_TREE_SEARCH_TIME_UNIT);
-}
-
-/*
     Search the avl tree for the pairs in question, results to output file
 */
-void searchAVLTree(Avl avl, ofstream &outputFile, string (&Q)[Q_SIZE]){
+void searchAVLTree(Avl* avl, ofstream &outputFile, string (&Q)[Q_SIZE]){
     chrono::steady_clock::time_point end, start;
     outputFile << printHeadLine(AVL_TREE);
-    outputFile << avl.getBuildingTime();
+    outputFile << avl -> getBuildingTime();
 
     start = chrono::steady_clock::now();
     for (string q : Q)
     {
-        outputFile << avl.find(q);
+        outputFile << avl -> find(q);
     }
     end = chrono::steady_clock::now();
 
     outputFile << showTime(start, end, AVL_TREE_SEARCH_TIME_UNIT);
 }
 
+// /*
+//     Search the binary tree for the pairs in question, results to output file
+// */
+void searchBinaryTree(BinaryTree* binaryTree, ofstream &outputFile, string (&Q)[Q_SIZE]){
+    chrono::steady_clock::time_point end, start;
+    outputFile << printHeadLine(BINARY_TREE);
+    outputFile << binaryTree -> getBuildingTime();
+
+    start = chrono::steady_clock::now();
+
+    for (string q : Q)
+    {
+        outputFile << binaryTree -> find(q);
+    }
+    end = chrono::steady_clock::now();
+    outputFile << showTime(start, end, BINARY_TREE_SEARCH_TIME_UNIT);
+}
+
 /*
     Search the hash table for the pairs in question, results to output file
 */
-void searchHashTable(HashTable hashTable, ofstream &outputFile, string (&Q)[Q_SIZE]){
+void searchHashTable(HashTable* hashTable, ofstream &outputFile, string (&Q)[Q_SIZE]){
     chrono::steady_clock::time_point end, start;
     outputFile << printHeadLine(HASH_TABLE);
-    outputFile << hashTable.getBuildingTime();
+    outputFile << hashTable -> getBuildingTime();
 
     start = chrono::steady_clock::now();
     for (string q : Q)
     {
-        outputFile << hashTable.get(q);
+        outputFile << hashTable -> get(q);
     }
     end = chrono::steady_clock::now();
 
     outputFile << showTime(start, end, HASH_TABLE_SEARCH_TIME_UNIT);
 }
+
+/*
+    Search the unsorted array for the pairs in question, results to output file
+*/
+void searchUnsortedArray(UnsortedArray* unsortedArray, ofstream &outputFile, string (&Q)[Q_SIZE]){
+        chrono::steady_clock::time_point end, start;
+        outputFile << printHeadLine(UNSORTED_ARRAY);
+        outputFile << unsortedArray -> getBuildingTime();
+        start = chrono::steady_clock::now();
+
+        for (string q : Q)
+        {
+            outputFile << unsortedArray -> find(q);
+        }
+        end = chrono::steady_clock::now();
+        outputFile << showTime(start, end, UNSORTED_ARRAY_SEARCH_TIME_UNIT);
+}
+
+void searchSortedArray(SortedArray* sortedArray, ofstream &outputFile, string (&Q)[Q_SIZE]){
+        chrono::steady_clock::time_point end, start;
+        outputFile << printHeadLine(SORTED_ARRAY);
+        outputFile << sortedArray -> getBuildingTime();
+        start = chrono::steady_clock::now();
+
+        int i =0;
+        for (string q : Q)
+        {
+            outputFile << sortedArray -> find(q);
+        }
+        end = chrono::steady_clock::now();
+        outputFile << showTime(start, end, SORTED_ARRAY_SEARCH_TIME_UNIT);
+    }
 
 int main()
 {
@@ -192,11 +193,11 @@ int main()
     int  QsetCounter = 0;
     srand(time(0));
 
-   // UnsortedArray unsortedArray;
-  //  SortedArray sortedArray;
-  //  HashTable hashTable;
-    BinaryTree binaryTree;
     //Avl avl;
+    //BinaryTree binaryTree;
+    //HashTable hashTable;
+    //UnsortedArray unsortedArray;
+    SortedArray sortedArray;
 
 //  get each line of the file
     while (getline(inputFile,line))
@@ -210,16 +211,16 @@ int main()
             while ( stringStream >> currentWord){
                 pair = previousWord + " " + currentWord;
 
-                //unsortedArray.insert(pair);
-                //sortedArray.insert(pair);
-                binaryTree.insert(pair);
-                //avl.insert(pair);
-                //hashTable.insert(pair);
+               //avl.insert(pair);
+               //binaryTree.insert(pair);
+               //hashTable.insert(pair);
+               //unsortedArray.insert(pair);
+                sortedArray.insert(pair);
 
                 previousWord = currentWord;
 
                 // insert a word to Qset with an arbitary chance of 30%
-               if (QsetCounter <Q_SIZE){
+                if (QsetCounter < Q_SIZE){
                     int randomNumber = rand();
                     if (randomNumber % 10 > 7){
                         Q[QsetCounter] = pair;
@@ -233,16 +234,12 @@ int main()
 
     chrono::steady_clock::time_point end, start;
 
-    // for (long long int i = 0 ; i < sortedArray.getSize() ; i ++){
-    //     outputFile << sortedArray.get(i);
-    // }
-
-    //searchAVLTree(avl, outputFile, Q);
-    //searchUnsortedArray(unsortedArray, outputFile, Q);
-    //searchSortedArray(sortedArray, outputFile, Q);
-    searchBinaryTree(binaryTree, outputFile, Q);
-    //searchHashTable(hashTable, outputFile, Q);
-
+    //searchAVLTree(&avl, outputFile, Q);
+    //searchBinaryTree(&binaryTree, outputFile, Q);
+    //searchHashTable(&hashTable, outputFile, Q);
+    //searchUnsortedArray(&unsortedArray, outputFile, Q);
+    searchSortedArray(&sortedArray, outputFile, Q);
+   
     outputFile.close();
 
     return 0;

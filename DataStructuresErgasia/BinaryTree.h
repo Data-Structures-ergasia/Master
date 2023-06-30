@@ -36,9 +36,6 @@ private:
 	int compare(std::string s1, std::string s2);
 	void calculateTime(chrono::steady_clock::time_point startTime);
 
-	void inorder(Node *node);
-	void postorder(Node *node);
-	void preorder(Node *node);
 	void deleteBinaryTree(Node *node);
 	
 public:
@@ -48,10 +45,6 @@ public:
 	std::string find(std::string key);
     std::string getBuildingTime();
 
-	void inorder();
-	void preorder();
-	void postorder();
-	void deleteKey(std::string key);
 	~BinaryTree();
 };
 #endif

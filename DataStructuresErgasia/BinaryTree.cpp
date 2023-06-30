@@ -17,10 +17,12 @@ BinaryTree::BinaryTree()
     calculateTime(startTime);
 }
 
+// compare the two strings, s1: existing key, s2: key to insert
 int BinaryTree::compare(string s1, string s2){
     return s1.compare(s2);
 }
 
+// calculate time passed in nanosecods (better accuracy)
 void BinaryTree::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
     chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
@@ -134,68 +136,6 @@ void BinaryTree::insert(string key)
     }
 
     calculateTime(startTime);
-}
-
-// print the inorder of binary tree to the console
-void BinaryTree::inorder()
-{
-    cout<< IN_ORDER << NEWLINE;
-
-    inorder(root);
-}
-
-void BinaryTree::inorder(Node *node)
-{
-
-    if (node == NULL)
-    {
-        return;
-    }
-
-    inorder(node->left);
-    cout << KEY << node->key << RIGHT_QUOTATION_MARK << WAS_FOUND << node->found << TIMES << NEWLINE;
-
-    inorder(node->right);
-}
-
-// print the preorder of the binary tree to the console
-void BinaryTree::preorder()
-{
-    cout<< PRE_ORDER <<endl;
-
-    preorder(root);
-}
-
-void BinaryTree::preorder(Node *node)
-{
-    if (node==NULL){
-        return;
-    }
-    
-    cout << KEY << node->key << RIGHT_QUOTATION_MARK << WAS_FOUND << node->found << TIMES << NEWLINE;
-
-    preorder(node->left);
-    preorder(node->right);
-}
-
-//print the postorder of binary  tree to the console
-void BinaryTree::postorder()
-{
-    cout<< POST_ORDER <<endl;
-    postorder(root);
-}
-
-void BinaryTree::postorder(Node *node)
-{
-    if (node == NULL)
-    {
-        return;
-    }
-
-    postorder(node->left);
-    postorder(node->right);
-    
-    cout << KEY << node->key << RIGHT_QUOTATION_MARK << WAS_FOUND << node->found << TIMES << NEWLINE;
 }
 
 //delete the tree and free its space
