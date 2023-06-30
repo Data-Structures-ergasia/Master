@@ -23,14 +23,14 @@ namespace constants{
     static std::string const HASH_TABLE_BUILD_TIME_UNIT = MS;
     static std::string const UNSORTED_ARRAY_BUILD_TIME_UNIT = MS;
     static std::string const SORTED_ARRAY_BUILD_TIME_UNIT = MS;
-    static std::string const BINARY_TREE_BUILD_TIME_UNIT = NS;
-    static std::string const AVL_TREE_BUILD_TIME_UNIT = NS;
+    static std::string const BINARY_TREE_BUILD_TIME_UNIT = MS;
+    static std::string const AVL_TREE_BUILD_TIME_UNIT = MS;
 
     static std::string const HASH_TABLE_SEARCH_TIME_UNIT = MS;
     static std::string const UNSORTED_ARRAY_SEARCH_TIME_UNIT = MS;
     static std::string const SORTED_ARRAY_SEARCH_TIME_UNIT = MS;
     static std::string const BINARY_TREE_SEARCH_TIME_UNIT = MS;
-    static std::string const AVL_TREE_SEARCH_TIME_UNIT = NS;
+    static std::string const AVL_TREE_SEARCH_TIME_UNIT = MS;
 
     static std::string const NEWLINE = "\n";
     static std::string const TAB = "\t";

@@ -4,21 +4,15 @@
 #include <sstream>
 #include <chrono>
 #include <string.h>
-#include "UnsortedArray.h"
-#include "UnsortedArray.cpp"
-#include "SortedArray.h"
-#include "SortedArray.cpp"
-#include "HashTable.h"
-#include "HashTable.cpp"
-#include "BinaryTree.h"
-#include "BinaryTree.cpp"
 #include "AVl.h"
-#include "Avl.cpp"
+#include "BinaryTree.h"
+#include "HashTable.h"
+#include "UnsortedArray.h"
+#include "SortedArray.h"
 #include "Constants.h"
 
 using namespace std;
 using namespace constants;
-
 
 /*
     this function removes annotation from a given string by parsing each character and checking if it is alphanumeric or space.
@@ -193,10 +187,10 @@ int main()
     int  QsetCounter = 0;
     srand(time(0));
 
-    //Avl avl;
-    //BinaryTree binaryTree;
-    //HashTable hashTable;
-    //UnsortedArray unsortedArray;
+    Avl avl;
+    BinaryTree binaryTree;
+    HashTable hashTable;
+    UnsortedArray unsortedArray;
     SortedArray sortedArray;
 
 //  get each line of the file
@@ -211,11 +205,11 @@ int main()
             while ( stringStream >> currentWord){
                 pair = previousWord + " " + currentWord;
 
-               //avl.insert(pair);
-               //binaryTree.insert(pair);
-               //hashTable.insert(pair);
-               //unsortedArray.insert(pair);
-                sortedArray.insert(pair);
+               avl.insert(pair);
+               binaryTree.insert(pair);
+               hashTable.insert(pair);
+               unsortedArray.insert(pair);
+               sortedArray.insert(pair);
 
                 previousWord = currentWord;
 
@@ -234,12 +228,12 @@ int main()
 
     chrono::steady_clock::time_point end, start;
 
-    //searchAVLTree(&avl, outputFile, Q);
-    //searchBinaryTree(&binaryTree, outputFile, Q);
-    //searchHashTable(&hashTable, outputFile, Q);
-    //searchUnsortedArray(&unsortedArray, outputFile, Q);
+    searchAVLTree(&avl, outputFile, Q);
+    searchBinaryTree(&binaryTree, outputFile, Q);
+    searchHashTable(&hashTable, outputFile, Q);
+    searchUnsortedArray(&unsortedArray, outputFile, Q);
     searchSortedArray(&sortedArray, outputFile, Q);
-   
+
     outputFile.close();
 
     return 0;

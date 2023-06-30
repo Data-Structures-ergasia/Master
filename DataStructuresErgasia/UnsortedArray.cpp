@@ -10,8 +10,8 @@ using namespace std;
 //constructor, initialize pointers for all elements
 UnsortedArray::UnsortedArray()
 {
-    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
-    chrono::nanoseconds totalElapsedTime(0); 
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
+    chrono::nanoseconds totalElapsedTime(0);
 
     capacity = ARRAY_SIZE;
     size = 0;
@@ -48,7 +48,7 @@ int UnsortedArray::compare(string s1, string s2){
 void UnsortedArray::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
     chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
-        
+
     totalElapsedTime += elapsedTime;
 }
 
@@ -139,7 +139,7 @@ void UnsortedArray::resize()
 // insert the key in question to the array, use linear search to check whether it exists or not
 void UnsortedArray::insert(string key)
 {
-    std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); 
+    std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
 
     if (size >= capacity){
         resize();
@@ -150,13 +150,13 @@ void UnsortedArray::insert(string key)
         if (compare(array[i] -> key, key) == 0)
         {
             array[i] -> found ++;
-            return;            
+            return;
         }
     }
-    
+
     array[size] -> key = key;
     array[size] -> found = 1;
     size++;
-    
+
     calculateTime(startTime);
 }

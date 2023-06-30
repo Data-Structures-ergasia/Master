@@ -2,6 +2,7 @@
 #define BINARYTREE_H
 #include <string>
 #include <stdlib.h>
+#include <chrono>
 
 class Node
 {
@@ -34,14 +35,13 @@ private:
 	Node *root;
 
 	int compare(std::string s1, std::string s2);
-	void calculateTime(chrono::steady_clock::time_point startTime);
-
+	void calculateTime(std::chrono::steady_clock::time_point startTime);
 	void deleteBinaryTree(Node *node);
-	
+
 public:
 	BinaryTree();
+	
 	void insert(std::string key);
-
 	std::string find(std::string key);
     std::string getBuildingTime();
 

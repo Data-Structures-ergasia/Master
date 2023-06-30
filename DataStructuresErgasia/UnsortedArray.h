@@ -1,7 +1,8 @@
 #ifndef UNSORTEDARRAY_H
 #define UNSORTEDARRAY_H
 #include <stdlib.h>
-
+#include <string>
+#include <chrono>
 
 class UnsortedArray
 {

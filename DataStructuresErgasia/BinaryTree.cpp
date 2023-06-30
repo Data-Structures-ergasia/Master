@@ -9,8 +9,8 @@ using namespace std;
 // constructor, adding time passed to be more complete
 BinaryTree::BinaryTree()
 {
-    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
-    chrono::nanoseconds totalElapsedTime(0); 
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
+    chrono::nanoseconds totalElapsedTime(0);
 
     root = NULL;
 
@@ -26,7 +26,7 @@ int BinaryTree::compare(string s1, string s2){
 void BinaryTree::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
     chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
-        
+
     totalElapsedTime += elapsedTime;
 }
 
@@ -80,7 +80,7 @@ string BinaryTree::find(string key)
             returnString += WAS_FOUND + to_string(temp -> found) + TIMES + NEWLINE;
             return returnString;
         }
-        
+
     }
 
     return returnString + WAS_NOT_FOUND + NEWLINE;
@@ -89,7 +89,7 @@ string BinaryTree::find(string key)
 // insert the key, if it exists increase its found field by one
 void BinaryTree::insert(string key)
 {
-    std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); 
+    std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
 
     Node *newNode = new Node(key);
 
@@ -125,7 +125,7 @@ void BinaryTree::insert(string key)
     }
 
     comparison = compare(tempRoot->key, key);
-    
+
     // insert the new node to the correct "side"
     if (comparison > 0){
         tempRoot->left = newNode;
@@ -144,7 +144,7 @@ void BinaryTree::deleteBinaryTree(Node* node){
     if (node == NULL) {
         return;
     }
- 
+
     // delete left and right subtree
     deleteBinaryTree(node->left);
     deleteBinaryTree(node->right);

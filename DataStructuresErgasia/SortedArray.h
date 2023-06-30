@@ -1,6 +1,8 @@
 #ifndef SORTEDARRAY_H
 #define SORTEDARRAY_H
 #include <stdlib.h>
+#include <string>
+#include <chrono>
 
 class SortedArray
 {
@@ -17,7 +19,7 @@ private:
 	long long int size;
 
 	int compare(std::string s1, std::string s2);
-	void calculateTime(chrono::steady_clock::time_point startTime);
+	void calculateTime(std::chrono::steady_clock::time_point startTime);
 	long long int findPositionOf(std::string key);
 	void resize();
 public:

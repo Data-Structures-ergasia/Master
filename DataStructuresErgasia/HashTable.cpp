@@ -10,12 +10,12 @@ using namespace std;
 
 //constructor, initialize pointers for all elements
 HashTable::HashTable(){
-    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
-    chrono::nanoseconds totalElapsedTime(0); 
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
+    chrono::nanoseconds totalElapsedTime(0);
 
     capacity = ARRAY_SIZE;
     size = 0;
-    
+
     array = new (nothrow) entry*[capacity];
 
     for (size_t i = 0 ; i < capacity ; i++){
@@ -39,7 +39,7 @@ int HashTable::compare(string s1, string s2){
 void HashTable::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
     chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
-        
+
     totalElapsedTime += elapsedTime;
 }
 
@@ -60,7 +60,7 @@ void HashTable::resize()
     size_t oldCapacity = capacity;
 
     capacity = newCapacity;
-    
+
     //initialize the new table
     entry **temp = new (nothrow) entry*[newCapacity];
     for (size_t i = 0 ; i < capacity ; i++){
@@ -68,14 +68,14 @@ void HashTable::resize()
     }
 
     size = 0;
-    
+
     if (temp != NULL){
 
         for (size_t i =0 ; i < oldCapacity ; i++){
             // insert each element along with the times it was found by this point
             insertIntoTable(temp, array[i] -> key, array[i] -> found);
         }
-        
+
         // delete each pointer of the array and then the array as a whole to save space
         for (size_t i = 0 ; i < oldCapacity ; i++){
             delete array[i];
@@ -96,10 +96,10 @@ void HashTable::resize()
 // take mod capacity to ensure we won't get a value that is out of bounds
 size_t HashTable::hash(string key){
     size_t hashValue = 0;
-    for (long int i = 0 ; i < key.size(); i++ ){
+    for (unsigned int i = 0 ; i < key.size(); i++ ){
         hashValue = hashValue * 31 + key[i];
     }
-    
+
     return hashValue % capacity;
 }
 
@@ -116,12 +116,12 @@ void HashTable::insertIntoTable(entry** tableToInsertTo, string key, unsigned in
 
     while (tableToInsertTo[position] -> occupied) {
 
-        // the key at position is the same as the one that is being inserted 
+        // the key at position is the same as the one that is being inserted
         if (compare(tableToInsertTo[position] -> key, key) == 0){
             tableToInsertTo[position] -> found++;
-            return; 
+            return;
         }
-        
+
         position = hash2(position);
     }
 
@@ -136,7 +136,7 @@ void HashTable::insertIntoTable(entry** tableToInsertTo, string key, unsigned in
 // insert element to the table using the hash functions
 void HashTable::insert(string key){
 
-    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
 
     // if the array is LOAD_FACTOR% (by default 75%) full, increace its size to avoid collisions
     if (size >capacity * LOAD_FACTOR){
@@ -146,10 +146,10 @@ void HashTable::insert(string key){
     size_t position = hash(key);
 
     while (array[position] -> occupied) {
-        // the key at position is the same as the one that is being inserted 
+        // the key at position is the same as the one that is being inserted
         if (compare(array[position] -> key, key) == 0){
             array[position] -> found++;
-            array[position] -> key = key; 
+            array[position] -> key = key;
             return;
         }
         position = hash2(position);
@@ -179,7 +179,7 @@ string HashTable::get(string key){
     while (array[position] -> occupied){
         if (compare(array[position] -> key, key) == 0){
             returnString += WAS_FOUND + to_string(array[position] -> found) + TIMES + NEWLINE;
-            return returnString;            
+            return returnString;
         }
 
         position = hash2(position);
@@ -205,7 +205,7 @@ string HashTable::getBuildingTime(){
 
         return returnString;
     }
-    
+
     if (HASH_TABLE_BUILD_TIME_UNIT == NS)
     {
         int time = chrono::duration_cast<chrono::nanoseconds>(totalElapsedTime).count();

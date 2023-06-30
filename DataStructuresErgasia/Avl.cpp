@@ -1,12 +1,15 @@
 #include "Avl.h"
-#include <iostream>
 #include "Avl_Actions.cpp"
+#include "Constants.h"
+#include <iostream>
+
+using namespace constants;
 using namespace std;
 
 Avl::Avl()
 {
-    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
-    chrono::nanoseconds totalElapsedTime(0); 
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
+    chrono::nanoseconds totalElapsedTime(0);
 
     root = NULL;
 
@@ -40,19 +43,18 @@ string Avl::find(string key)
 
 int Avl::compare(string s1, string s2){
     return s1.compare(s2);
-
 }
 
 void Avl::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
     chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
-        
+
     totalElapsedTime += elapsedTime;
 }
 
 void Avl::insert(string key)
 {
-    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
     bool flag=false;
     AvlNode *newNode = new AvlNode(key);
     //if the tree does not exist we create its root with the given key
@@ -136,7 +138,7 @@ void Avl::insert(string key)
             //checking if we continue going left
             if(compare(flagtemp->left->key, key) > 0){
                 Rotate(*flagtemp,false);
-                
+
                 calculateTime(startTime);
 
                 return;
@@ -150,7 +152,7 @@ void Avl::insert(string key)
             //checking if we continue going right
             if(compare(flagtemp->right->key, key) < 0){
                 Rotate(*flagtemp,true);
-        
+
                 calculateTime(startTime);
 
                 return;
@@ -162,7 +164,7 @@ void Avl::insert(string key)
             Rotate(*flagtemp,true);
         }
     }
-    
+
     calculateTime(startTime);
 }
 string Avl::getBuildingTime(){

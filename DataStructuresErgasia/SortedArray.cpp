@@ -10,8 +10,8 @@ using namespace std;
 //constructor, initialize pointers for all elements
 SortedArray::SortedArray()
 {
-    chrono::steady_clock::time_point startTime = chrono::steady_clock::now(); 
-    chrono::nanoseconds totalElapsedTime(0); 
+    chrono::steady_clock::time_point startTime = chrono::steady_clock::now();
+    chrono::nanoseconds totalElapsedTime(0);
 
     capacity = ARRAY_SIZE;
     size = 0;
@@ -75,7 +75,7 @@ int SortedArray::compare(string s1, string s2){
 void SortedArray::calculateTime(chrono::steady_clock::time_point startTime){
     chrono::steady_clock::time_point endTime = chrono::steady_clock::now();
     chrono::nanoseconds elapsedTime = chrono::duration_cast<chrono::nanoseconds>(endTime - startTime);
-        
+
     totalElapsedTime += elapsedTime;
 }
 
@@ -130,7 +130,7 @@ long long int SortedArray::findPositionOf(string key){
     }
 
     return mid;
-}              
+}
 
 // insert element in question to the array using the findPositionOf function,
 // if it didn't exist, place it at the appropriate position and shift elements to the right.

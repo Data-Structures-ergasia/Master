@@ -2,6 +2,7 @@
 #define HASHTABLE_H
 #include <stdlib.h>
 #include <string>
+#include <chrono>
 
 class HashTable{
     private:
@@ -18,14 +19,14 @@ class HashTable{
 	size_t size;
 
     int compare(std::string s1, std::string s2);
-	void calculateTime(chrono::steady_clock::time_point startTime);
+	void calculateTime(std::chrono::steady_clock::time_point startTime);
 
 	void resize();
     void insertIntoTable(entry** tableToInsertTo, std::string key, unsigned int found);
     size_t hash(std::string key);
     size_t hash2(size_t position);
 
-    public: 
+    public:
     HashTable();
 
     void insert(std::string key);
